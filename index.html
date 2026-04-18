@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="PetFeeder"/>
+<meta name="theme-color" content="#7c6fcd"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+<title>Pet Feeder</title>
+<style>
+:root{--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding-bottom:calc(60px + var(--sb));color:#1e1b4b}
+
+/* header */
+.hdr{background:#7c6fcd;padding:calc(var(--st)+14px) 16px 14px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(124,111,205,.3)}
+.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hdr-title{font-size:20px;font-weight:900;color:#fff;flex:1;letter-spacing:-.3px}
+.who-wrap{display:flex;background:rgba(255,255,255,.2);border-radius:20px;padding:3px;gap:3px}
+.who-btn{padding:6px 16px;border-radius:16px;font-size:13px;font-weight:800;cursor:pointer;color:rgba(255,255,255,.7);border:none;background:none;font-family:'Nunito',sans-serif;transition:all .15s}
+.who-btn.on{background:#fff;color:#7c6fcd}
+.hdr-bot{display:flex;align-items:center;justify-content:space-between}
+.sync-txt{font-size:12px;color:rgba(255,255,255,.6)}
+.sync-btn{font-size:12px;color:#fff;background:rgba(255,255,255,.2);border:none;border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+
+/* chips */
+.chips{display:flex;gap:8px;padding:12px 12px 0;overflow-x:auto}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:800}
+.c-red{background:#ef4444;color:#fff}
+.c-amb{background:#d97706;color:#fff}
+.c-ok{background:#6366f1;color:#fff}
+.c-none{background:rgba(255,255,255,.5);color:#6b7280;border:1px solid #c4b5fd}
+
+/* page */
+.page{padding:12px}
+
+/* add card */
+.add-box{background:rgba(255,255,255,.7);border:1px solid #c4b5fd;border-radius:18px;padding:16px;margin-bottom:14px}
+.add-box h3{font-size:12px;font-weight:800;color:#6366f1;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.add-row{display:flex;gap:8px;margin-bottom:10px}
+.add-row input{flex:1;padding:12px 14px;background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;color:#1e1b4b;font-size:15px;outline:none;font-family:'Nunito',sans-serif;font-weight:700}
+.add-row input::placeholder{color:#a5b4fc;font-weight:400}
+.add-row input:focus{border-color:#7c6fcd}
+.add-row select{padding:12px 8px;background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;font-size:20px;outline:none}
+.add-submit{width:100%;padding:13px;border-radius:14px;border:none;background:#7c6fcd;color:#fff;font-size:16px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif}
+.add-submit:active{background:#6d5fc0}
+
+/* 2-col pet grid */
+.pets-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* pet card */
+.pc{background:#fff;border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid transparent}
+.pc-red {border-left-color:#f87171;background:#fffafa}
+.pc-ok  {border-left-color:#818cf8;background:#fafafe}
+.pc-soon{border-left-color:#fbbf24;background:#fffdf5}
+.pc-none{border-left-color:#c4b5fd;background:#faf8ff}
+
+.pc-del{position:absolute;top:8px;right:8px;background:none;border:none;color:#d1d5db;font-size:18px;cursor:pointer;line-height:1;padding:2px}
+.pc-del:hover{color:#9ca3af}
+.pc-avi{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;margin-bottom:2px}
+.avi-red {background:#fee2e2}
+.avi-ok  {background:#e0e7ff}
+.avi-soon{background:#fef3c7}
+.avi-none{background:#ede9fe}
+.pc-name{font-size:14px;font-weight:900;color:#1e1b4b;cursor:pointer;line-height:1.2}
+.pc-name:hover{opacity:.7}
+.pc-name-inp{font-size:14px;font-weight:900;color:#1e1b4b;border:none;border-bottom:2px solid #7c6fcd;outline:none;text-align:center;width:100%;background:transparent;font-family:'Nunito',sans-serif}
+.pc-time{font-size:22px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
+.t-red {color:#ef4444}
+.t-ok  {color:#6366f1}
+.t-soon{color:#d97706}
+.t-none{color:#a78bfa;font-size:15px}
+.pc-lbl{font-size:10px;font-weight:800;opacity:.55}
+.pc-who{font-size:11px;font-weight:700;color:#a5b4fc}
+.pc-btn{width:100%;padding:9px;border-radius:10px;border:none;font-size:13px;font-weight:800;cursor:pointer;margin-top:5px;font-family:'Nunito',sans-serif;transition:opacity .15s}
+.pc-btn:active{opacity:.8}
+.btn-red {background:#fee2e2;color:#ef4444}
+.btn-ok  {background:#e0e7ff;color:#6366f1}
+.btn-soon{background:#fef3c7;color:#d97706}
+.btn-none{background:#ede9fe;color:#7c6fcd}
+
+/* history toggle */
+.hist-row{width:100%;margin-top:4px}
+.hist-tog{width:100%;background:none;border:none;font-size:11px;font-weight:700;color:#c4b5fd;cursor:pointer;padding:2px 0;font-family:'Nunito',sans-serif}
+.hist-list{margin-top:4px;text-align:left;width:100%}
+.hist-item{display:flex;gap:6px;padding:4px 0;border-top:1px solid #f3f0ff;font-size:11px}
+.hi-who{font-weight:800;color:#7c6fcd;min-width:28px}
+.hi-rest{color:#a5b4fc}
+
+/* feed modal */
+.overlay{position:fixed;inset:0;background:rgba(30,27,75,.5);z-index:200;display:flex;align-items:flex-end}
+.sheet{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;border-top:4px solid #7c6fcd}
+.sheet-title{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
+.sheet-sub{font-size:14px;color:#6b7280;margin-bottom:18px}
+.qlbl{font-size:11px;font-weight:800;color:#7c6fcd;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.qb{padding:13px 6px;background:#f5f3ff;border:1.5px solid #e0e7ff;border-radius:10px;color:#7c6fcd;font-size:14px;font-weight:800;cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;transition:all .15s}
+.qb.on,.qb:active{background:#7c6fcd;color:#fff;border-color:#7c6fcd}
+.cust-wrap{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.cust-wrap input{flex:1;padding:13px;background:#f5f3ff;border:1.5px solid #c4b5fd;border-radius:12px;color:#1e1b4b;font-size:18px;font-weight:800;text-align:center;outline:none;font-family:'Nunito',sans-serif}
+.cust-wrap input:focus{border-color:#7c6fcd;background:#fff}
+.cust-wrap span{font-size:14px;color:#9ca3af;white-space:nowrap}
+.confirm-btn{width:100%;padding:15px;border-radius:14px;border:none;background:#7c6fcd;color:#fff;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:10px;font-family:'Nunito',sans-serif}
+.cancel-btn{width:100%;padding:13px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:15px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+
+/* sync modal */
+.sync-sheet{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;position:relative;border-top:4px solid #7c6fcd}
+.sync-sheet h2{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:6px}
+.sync-sheet p{font-size:14px;color:#6b7280;line-height:1.65;margin-bottom:18px}
+.code-box{background:#f5f3ff;border:2px solid #c4b5fd;border-radius:14px;padding:16px;font-size:28px;font-weight:900;text-align:center;letter-spacing:8px;color:#7c6fcd;margin-bottom:12px;cursor:pointer}
+.s-btn{width:100%;padding:14px;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:10px;font-family:'Nunito',sans-serif}
+.s-btn-p{background:#7c6fcd;color:#fff;border:none}
+.s-btn-g{background:none;color:#9ca3af;border:1.5px solid #e0e7ff}
+.s-div{text-align:center;color:#d1d5db;font-size:12px;margin:12px 0}
+.code-inp{width:100%;padding:14px;background:#f5f3ff;border:1.5px solid #c4b5fd;border-radius:12px;color:#1e1b4b;font-size:22px;font-weight:800;text-align:center;letter-spacing:5px;outline:none;margin-bottom:12px;text-transform:uppercase;font-family:'Nunito',sans-serif}
+.code-inp:focus{border-color:#7c6fcd}
+.m-close{position:absolute;top:18px;right:18px;background:#f5f3ff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#9ca3af}
+
+/* toast */
+.toast{position:fixed;bottom:calc(72px + var(--sb));left:50%;transform:translateX(-50%) translateY(8px);background:#7c6fcd;color:#fff;padding:11px 22px;border-radius:20px;font-size:14px;font-weight:800;opacity:0;transition:all .2s;pointer-events:none;z-index:300;white-space:nowrap;font-family:'Nunito',sans-serif}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* syncing spinner */
+.spin{display:inline-block;width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-title">🐾 Pet Feeder</div>
+    <div class="who-wrap">
+      <button class="who-btn on" id="by-you" onclick="setWho('Mango')">Mango</button>
+      <button class="who-btn" id="by-wife" onclick="setWho('Lost')">Lost</button>
+    </div>
+  </div>
+  <div class="hdr-bot">
+    <span class="sync-txt" id="sync-txt">Connecting…</span>
+    <button class="sync-btn" onclick="openSync()">🔗 Sync code</button>
+  </div>
+</div>
+
+<div class="chips" id="chips"></div>
+
+<div class="page">
+  <div class="add-box">
+    <h3>Add a pet</h3>
+    <div class="add-row">
+      <select id="new-emoji">
+        <option>🐶</option><option>🐱</option><option>🐰</option>
+        <option>🐹</option><option>🐦</option><option>🐠</option>
+        <option>🦎</option><option>🐢</option><option>🐍</option><option>🐾</option>
+      </select>
+      <input id="new-name" placeholder="Pet name e.g. Mango" maxlength="14"
+        onkeydown="if(event.key==='Enter')addPet()"/>
+    </div>
+    <button class="add-submit" onclick="addPet()">+ Add Pet</button>
+  </div>
+  <div class="pets-grid" id="pets-grid"></div>
+</div>
+
+<!-- Feed modal -->
+<div class="overlay" id="feed-overlay" style="display:none" onclick="if(event.target===this)closeFeed()">
+  <div class="sheet">
+    <div class="sheet-title" id="feed-title">Mark as fed</div>
+    <div class="sheet-sub" id="feed-sub">How long until next meal?</div>
+    <div class="qlbl">Who is feeding?</div>
+    <div class="qgrid" style="grid-template-columns:1fr 1fr;margin-bottom:20px">
+      <div class="qb feed-who-btn" id="fw-mango" onclick="pickFeedWho('Mango')">🌿 Mango</div>
+      <div class="qb feed-who-btn" id="fw-lost" onclick="pickFeedWho('Lost')">🍂 Lost</div>
+    </div>
+    <div class="qlbl">Quick select</div>
+    <div class="qgrid">
+      <div class="qb" onclick="pickQ(2)">2h</div>
+      <div class="qb" onclick="pickQ(4)">4h</div>
+      <div class="qb" onclick="pickQ(6)">6h</div>
+      <div class="qb" onclick="pickQ(8)">8h</div>
+      <div class="qb" onclick="pickQ(10)">10h</div>
+      <div class="qb" onclick="pickQ(12)">12h</div>
+      <div class="qb" onclick="pickQ(18)">18h</div>
+      <div class="qb" onclick="pickQ(24)">24h</div>
+    </div>
+    <div class="qlbl">Custom</div>
+    <div class="cust-wrap">
+      <input type="number" id="custom-h" placeholder="e.g. 7.5" min="0.5" max="168" step="0.5" oninput="clearQ()"/>
+      <span>hours until next meal</span>
+    </div>
+    <button class="confirm-btn" onclick="confirmFeed()">Confirm — Fed by <span id="confirm-who"></span></button>
+    <button class="cancel-btn" onclick="closeFeed()">Cancel</button>
+  </div>
+</div>
+
+<!-- Sync modal -->
+<div class="overlay" id="sync-overlay" style="display:none" onclick="if(event.target===this)closeSync()">
+  <div class="sync-sheet">
+    <button class="m-close" onclick="closeSync()">×</button>
+    <h2>Sync with Lost</h2>
+    <p>Share your 6-letter code. Lost opens the same app link, taps Sync code, enters it — you'll both see the same pets live.</p>
+    <div class="code-box" id="code-disp" onclick="copyCode()">——————</div>
+    <button class="s-btn s-btn-p" onclick="copyCode()">📋 Copy code</button>
+    <div class="s-div">— or join with a different code —</div>
+    <input class="code-inp" id="join-inp" placeholder="TYPE CODE" maxlength="6"
+      oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+      onkeydown="if(event.key==='Enter')joinCode()"/>
+    <button class="s-btn s-btn-p" onclick="joinCode()">Join this code</button>
+    <button class="s-btn s-btn-g" onclick="newCode()">Generate new code</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const FB = 'https://slave-feeder-default-rtdb.firebaseio.com/';
+let pets = [], who = 'Mango', showH = {}, pendingId = null, selQ = null, fbListener = null;
+let syncCode = localStorage.getItem('pf_code') || mkCode();
+localStorage.setItem('pf_code', syncCode);
+
+function mkCode() {
+  return Array.from({length:6}, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+}
+
+function fbUrl() { return FB + 'pets_' + syncCode + '.json'; }
+
+/* ── Firebase sync ── */
+async function fbSave() {
+  try {
+    await fetch(fbUrl(), {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(pets)
+    });
+    setStatus('Synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+  } catch(e) { setStatus('Sync failed — check connection'); }
+}
+
+async function fbLoad() {
+  try {
+    const r = await fetch(fbUrl());
+    const d = await r.json();
+    pets = Array.isArray(d) ? d : (d ? Object.values(d) : []);
+    render();
+    setStatus('Synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+  } catch(e) {
+    setStatus('Could not load — check connection');
+  }
+}
+
+function setStatus(msg) {
+  document.getElementById('sync-txt').textContent = msg;
+}
+
+/* Poll every 8 seconds to pick up wife's changes */
+let pollTimer;
+function startPolling() {
+  clearInterval(pollTimer);
+  fbLoad();
+  pollTimer = setInterval(fbLoad, 8000);
+}
+
+function setWho(w) {
+  who = w;
+  document.getElementById('by-you').classList.toggle('on', w === 'Mango');
+  document.getElementById('by-wife').classList.toggle('on', w === 'Lost');
+}
+
+function addPet() {
+  const n = document.getElementById('new-name').value.trim();
+  if (!n) { document.getElementById('new-name').focus(); return; }
+  pets.push({id:'p'+Date.now(), name:n, emoji:document.getElementById('new-emoji').value,
+    nextAt:null, lastFed:null, fedBy:null, history:[]});
+  document.getElementById('new-name').value = '';
+  fbSave(); render(); toast(n + ' added!');
+}
+
+function removePet(id) {
+  const p = pets.find(x => x.id===id);
+  if (!p || !confirm('Remove ' + p.name + '?')) return;
+  pets = pets.filter(x => x.id !== id);
+  fbSave(); render();
+}
+
+let feedWho = null;
+
+function pickFeedWho(w) {
+  feedWho = w;
+  document.getElementById('fw-mango').classList.toggle('on', w === 'Mango');
+  document.getElementById('fw-lost').classList.toggle('on', w === 'Lost');
+  document.getElementById('confirm-who').textContent = w;
+}
+
+function openFeed(id) {
+  const p = pets.find(x => x.id===id); if (!p) return;
+  pendingId = id; selQ = null; feedWho = who;
+  document.getElementById('feed-title').textContent = 'Fed ' + p.name;
+  document.getElementById('feed-sub').textContent = 'How long until ' + p.name + '\'s next meal?';
+  document.getElementById('confirm-who').textContent = feedWho;
+  document.getElementById('custom-h').value = '';
+  document.querySelectorAll('.qb').forEach(b => b.classList.remove('on'));
+  // Pre-select current global who in the feed-who picker
+  document.getElementById('fw-mango').classList.toggle('on', who === 'Mango');
+  document.getElementById('fw-lost').classList.toggle('on', who === 'Lost');
+  document.getElementById('feed-overlay').style.display = 'flex';
+}
+
+function pickQ(h) {
+  selQ = h;
+  document.getElementById('custom-h').value = '';
+  document.querySelectorAll('.qb:not(.feed-who-btn)').forEach(b => b.classList.toggle('on', parseFloat(b.textContent) === h));
+}
+function clearQ() { selQ = null; document.querySelectorAll('.qb:not(.feed-who-btn)').forEach(b => b.classList.remove('on')); }
+function closeFeed() { document.getElementById('feed-overlay').style.display = 'none'; pendingId = null; }
+
+function confirmFeed() {
+  const cv = parseFloat(document.getElementById('custom-h').value);
+  const h = selQ || (isNaN(cv) ? null : cv);
+  if (!feedWho) { toast('Choose who is feeding first!'); return; }
+  if (!h || h < 0.5) { toast('Pick a time first!'); return; }
+  const p = pets.find(x => x.id === pendingId); if (!p) return;
+  const now = Date.now();
+  p.lastFed = now; p.fedBy = feedWho; p.nextAt = now + h * 3600000;
+  if (!p.history) p.history = [];
+  p.history.unshift({time:now, who:feedWho, hours:h});
+  if (p.history.length > 20) p.history = p.history.slice(0, 20);
+  fbSave(); render(); closeFeed();
+  toast(p.name + ' fed by ' + feedWho + '! Next in ' + fmtH(h));
+}
+
+function getSt(p) {
+  if (!p.nextAt) return {type:'none', rem:Infinity};
+  const rem = p.nextAt - Date.now();
+  if (rem <= 0) return {type:'red', rem};
+  if (rem < 3600000) return {type:'soon', rem};
+  return {type:'ok', rem};
+}
+
+function fmtDur(ms) {
+  const t = Math.round(Math.abs(ms)/1000), h = Math.floor(t/3600), m = Math.floor((t%3600)/60), s = t%60;
+  if (h > 0) return h+'h '+m+'m';
+  if (m > 0) return m+'m '+s+'s';
+  return s+'s';
+}
+function fmtH(h) { return h%1===0 ? h+'h' : h+'h'; }
+function fmtTime(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts), n = new Date();
+  const today = d.toDateString() === n.toDateString();
+  return (today ? 'Today ' : d.toLocaleDateString([],{month:'short',day:'numeric'})+' ')
+    + d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function render() {
+  const counts = {red:0, soon:0, ok:0, none:0};
+  pets.forEach(p => counts[getSt(p).type]++);
+  let ch = '';
+  if (counts.red)  ch += `<div class="chip c-red">⚠ ${counts.red} overdue</div>`;
+  if (counts.soon) ch += `<div class="chip c-amb">◑ ${counts.soon} due soon</div>`;
+  if (counts.ok)   ch += `<div class="chip c-ok">✓ ${counts.ok} fed</div>`;
+  if (counts.none) ch += `<div class="chip c-none">— ${counts.none} not fed</div>`;
+  document.getElementById('chips').innerHTML = ch;
+
+  const el = document.getElementById('pets-grid');
+  if (!pets.length) { el.innerHTML = ''; return; }
+
+  const order = {red:0, soon:1, none:2, ok:3};
+  const sorted = [...pets].map(p => ({p, st:getSt(p)}))
+    .sort((a,b) => order[a.st.type]-order[b.st.type] || a.st.rem-b.st.rem);
+
+  el.innerHTML = sorted.map(({p, st}) => {
+    const t = st.type;
+    const bigNum = t==='none' ? 'No meal set' : (t==='red' ? '−' : '') + fmtDur(t==='red' ? -st.rem : st.rem);
+    const bigLbl = t==='red' ? 'overdue' : t==='soon' ? 'due soon' : t==='ok' ? 'until next meal' : 'tap to log';
+    const hist = p.history || [];
+    const sh = showH[p.id];
+    return `
+    <div class="pc pc-${t}">
+      <button class="pc-del" onclick="removePet('${p.id}')">×</button>
+      <div class="pc-avi avi-${t}">${p.emoji}</div>
+      <div class="pc-name" id="cn_${p.id}" onclick="startRename('${p.id}')">${esc(p.name)}</div>
+      <div class="pc-time t-${t}">${bigNum}</div>
+      <div class="pc-lbl">${bigLbl}</div>
+      <div class="pc-who">${p.fedBy ? 'by '+esc(p.fedBy) : ''}</div>
+      <button class="pc-btn btn-${t}" onclick="openFeed('${p.id}')">Mark as fed</button>
+      ${hist.length ? `
+        <div class="hist-row">
+          <button class="hist-tog" onclick="toggleH('${p.id}')">${sh?'▲ hide':'▼ history'}</button>
+          ${sh ? `<div class="hist-list">${hist.slice(0,5).map(h=>`
+            <div class="hist-item">
+              <span class="hi-who">${esc(h.who)}</span>
+              <span class="hi-rest">${fmtTime(h.time)}</span>
+            </div>`).join('')}</div>` : ''}
+        </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleH(id) { showH[id] = !showH[id]; render(); }
+
+function startRename(id) {
+  const el = document.getElementById('cn_'+id); if (!el) return;
+  const p = pets.find(x => x.id===id);
+  el.outerHTML = `<input class="pc-name-inp" id="rn_${id}" value="${esc(p.name)}" maxlength="14"
+    onblur="commitRename('${id}',this.value)"
+    onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape')render()"/>`;
+  document.getElementById('rn_'+id)?.focus();
+}
+function commitRename(id, v) {
+  const p = pets.find(x => x.id===id);
+  if (p && v.trim()) { p.name = v.trim(); fbSave(); }
+  render();
+}
+
+/* sync modal */
+function openSync() {
+  document.getElementById('code-disp').textContent = syncCode;
+  document.getElementById('join-inp').value = '';
+  document.getElementById('sync-overlay').style.display = 'flex';
+}
+function closeSync() { document.getElementById('sync-overlay').style.display = 'none'; }
+function copyCode() { navigator.clipboard?.writeText(syncCode).then(()=>toast('Code copied!')).catch(()=>{}); }
+function joinCode() {
+  const c = document.getElementById('join-inp').value.trim().toUpperCase();
+  if (c.length !== 6) { toast('Need 6 characters'); return; }
+  syncCode = c; localStorage.setItem('pf_code', c);
+  closeSync(); startPolling(); toast('Joined ' + c + '!');
+}
+function newCode() {
+  if (!confirm('Creates a fresh pet list on a new code. Old data stays.')) return;
+  syncCode = mkCode(); localStorage.setItem('pf_code', syncCode);
+  pets = []; fbSave(); render(); toast('New code: ' + syncCode);
+}
+
+let tT;
+function toast(m) {
+  const e = document.getElementById('toast'); e.textContent = m; e.classList.add('show');
+  clearTimeout(tT); tT = setTimeout(()=>e.classList.remove('show'), 2500);
+}
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+document.getElementById('code-disp') && (document.getElementById('code-disp').textContent = syncCode);
+setStatus('Code: ' + syncCode + ' — loading…');
+startPolling();
+setInterval(render, 1000);
+</script>
+</body>
+</html>
