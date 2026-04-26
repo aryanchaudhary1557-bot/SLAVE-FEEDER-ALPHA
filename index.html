@@ -137,6 +137,23 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .sb-card .sb-num{font-size:26px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-1px}
 .sb-card .sb-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.55)}
 
+/* scoreboard filter popup */
+.sb-popup-overlay{position:fixed;inset:0;background:rgba(30,27,75,.45);z-index:200;display:flex;align-items:flex-end}
+.sb-popup{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;border-top:4px solid #7c6fcd}
+.sb-popup-title{font-size:17px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
+.sb-popup-sub{font-size:13px;color:#9ca3af;margin-bottom:18px}
+.sb-qlbl{font-size:11px;font-weight:800;color:#7c6fcd;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.sb-qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.sb-qb{padding:12px 6px;background:#f5f3ff;border:1.5px solid #e0e7ff;border-radius:10px;color:#7c6fcd;font-size:13px;font-weight:800;cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;transition:all .15s}
+.sb-qb.on{background:#7c6fcd;color:#fff;border-color:#7c6fcd}
+.sb-date-row{display:flex;gap:8px;align-items:center;margin-bottom:20px}
+.sb-date-row input[type=date]{flex:1;padding:11px 12px;background:#f5f3ff;border:1.5px solid #c4b5fd;border-radius:12px;color:#1e1b4b;font-size:14px;font-weight:700;outline:none;font-family:'Nunito',sans-serif}
+.sb-date-row input[type=date]:focus{border-color:#7c6fcd;background:#fff}
+.sb-date-sep{font-size:12px;color:#a5b4fc;font-weight:800;flex-shrink:0}
+.sb-apply{width:100%;padding:14px;border-radius:14px;border:none;background:#7c6fcd;color:#fff;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px;font-family:'Nunito',sans-serif}
+.sb-cancel{width:100%;padding:12px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+.sb-active-badge{font-size:9px;font-weight:800;background:rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:2px 6px;margin-left:4px;vertical-align:middle}
+
 /* syncing spinner */
 .spin{display:inline-block;width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -160,22 +177,45 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 
 <div class="chips" id="chips"></div>
 
-<div class="scoreboard" id="scoreboard">
+<div class="scoreboard" id="scoreboard" onclick="openSbFilter()" style="cursor:pointer">
   <div class="sb-title">
-    <div class="sb-big">🏆 Feedings</div>
-    <div class="sb-sub">All-time total</div>
+    <div class="sb-big">🏆 Feedings <span class="sb-active-badge" id="sb-badge" style="display:none"></span></div>
+    <div class="sb-sub" id="sb-sub-lbl">All-time · tap to filter</div>
   </div>
   <div class="sb-scores" id="sb-scores">
     <div class="sb-card" id="sb-mango">
       <div class="sb-name">🌿 Mango</div>
       <div class="sb-num" id="sb-num-mango">0</div>
-      <div class="sb-lbl">feedings</div>
+      <div class="sb-lbl" id="sb-lbl-mango">feedings</div>
     </div>
     <div class="sb-card" id="sb-lost">
       <div class="sb-name">🍂 Lost</div>
       <div class="sb-num" id="sb-num-lost">0</div>
-      <div class="sb-lbl">feedings</div>
+      <div class="sb-lbl" id="sb-lbl-lost">feedings</div>
     </div>
+  </div>
+</div>
+
+<!-- Scoreboard filter popup -->
+<div class="sb-popup-overlay" id="sb-overlay" style="display:none" onclick="if(event.target===this)closeSbFilter()">
+  <div class="sb-popup">
+    <div class="sb-popup-title">📅 Filter feedings</div>
+    <div class="sb-popup-sub">Count feedings from a specific period</div>
+    <div class="sb-qlbl">Quick select</div>
+    <div class="sb-qgrid">
+      <div class="sb-qb" id="sbq-today"  onclick="pickSbQ('today')">Today</div>
+      <div class="sb-qb" id="sbq-week"   onclick="pickSbQ('week')">This week</div>
+      <div class="sb-qb" id="sbq-month"  onclick="pickSbQ('month')">This month</div>
+      <div class="sb-qb" id="sbq-all"    onclick="pickSbQ('all')">All time</div>
+    </div>
+    <div class="sb-qlbl">Custom date range</div>
+    <div class="sb-date-row">
+      <input type="date" id="sb-from" oninput="clearSbQ()"/>
+      <span class="sb-date-sep">→</span>
+      <input type="date" id="sb-to" oninput="clearSbQ()"/>
+    </div>
+    <button class="sb-apply" onclick="applySbFilter()">Apply filter</button>
+    <button class="sb-cancel" onclick="closeSbFilter()">Cancel</button>
   </div>
 </div>
 
@@ -386,10 +426,39 @@ function fmtTime(ts) {
 }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+/* ── Scoreboard filter state ── */
+let sbFilter = { mode: 'all', from: null, to: null };
+let sbQuickSel = 'all';
+
+function getFilterRange() {
+  const now = new Date();
+  if (sbFilter.mode === 'today') {
+    const s = new Date(now); s.setHours(0,0,0,0);
+    return { from: s.getTime(), to: Infinity };
+  }
+  if (sbFilter.mode === 'week') {
+    const s = new Date(now); s.setDate(s.getDate() - s.getDay()); s.setHours(0,0,0,0);
+    return { from: s.getTime(), to: Infinity };
+  }
+  if (sbFilter.mode === 'month') {
+    const s = new Date(now.getFullYear(), now.getMonth(), 1);
+    return { from: s.getTime(), to: Infinity };
+  }
+  if (sbFilter.mode === 'custom' && sbFilter.from) {
+    const f = new Date(sbFilter.from); f.setHours(0,0,0,0);
+    const t = sbFilter.to ? new Date(sbFilter.to) : new Date();
+    t.setHours(23,59,59,999);
+    return { from: f.getTime(), to: t.getTime() };
+  }
+  return { from: 0, to: Infinity };
+}
+
 function renderScoreboard() {
+  const range = getFilterRange();
   const counts = { Mango: 0, Lost: 0 };
   pets.forEach(p => {
     (p.history || []).forEach(h => {
+      if (h.time < range.from || h.time > range.to) return;
       if (h.who === 'Mango') counts.Mango++;
       else if (h.who === 'Lost') counts.Lost++;
     });
@@ -401,11 +470,58 @@ function renderScoreboard() {
   const tied      = counts.Mango === counts.Lost;
   document.getElementById('sb-mango').classList.toggle('sb-winner', mangoWins && !tied);
   document.getElementById('sb-lost').classList.toggle('sb-winner',  lostWins  && !tied);
-  // crown label
-  const mangoLbl = document.querySelector('#sb-mango .sb-lbl');
-  const lostLbl  = document.querySelector('#sb-lost  .sb-lbl');
-  mangoLbl.textContent = (mangoWins && !tied) ? 'feedings 👑' : 'feedings';
-  lostLbl.textContent  = (lostWins  && !tied) ? 'feedings 👑' : 'feedings';
+  document.getElementById('sb-lbl-mango').textContent = (mangoWins && !tied) ? 'feedings 👑' : 'feedings';
+  document.getElementById('sb-lbl-lost').textContent  = (lostWins  && !tied) ? 'feedings 👑' : 'feedings';
+  // badge & subtitle
+  const labels = { today:'Today', week:'This week', month:'This month', all:'All-time', custom:'Custom range' };
+  const badge = document.getElementById('sb-badge');
+  const sub   = document.getElementById('sb-sub-lbl');
+  if (sbFilter.mode !== 'all') {
+    badge.textContent = labels[sbFilter.mode];
+    badge.style.display = 'inline';
+    sub.textContent = labels[sbFilter.mode] + ' · tap to change';
+  } else {
+    badge.style.display = 'none';
+    sub.textContent = 'All-time · tap to filter';
+  }
+}
+
+function openSbFilter() {
+  // Pre-fill dates if custom
+  if (sbFilter.from) document.getElementById('sb-from').value = new Date(sbFilter.from).toISOString().slice(0,10);
+  if (sbFilter.to)   document.getElementById('sb-to').value   = new Date(sbFilter.to).toISOString().slice(0,10);
+  // highlight active quick btn
+  ['today','week','month','all'].forEach(k => {
+    document.getElementById('sbq-'+k).classList.toggle('on', sbQuickSel === k);
+  });
+  document.getElementById('sb-overlay').style.display = 'flex';
+}
+function closeSbFilter() { document.getElementById('sb-overlay').style.display = 'none'; }
+
+function pickSbQ(k) {
+  sbQuickSel = k;
+  ['today','week','month','all'].forEach(id => document.getElementById('sbq-'+id).classList.toggle('on', id === k));
+  // clear custom inputs
+  document.getElementById('sb-from').value = '';
+  document.getElementById('sb-to').value = '';
+}
+function clearSbQ() {
+  sbQuickSel = null;
+  ['today','week','month','all'].forEach(id => document.getElementById('sbq-'+id).classList.remove('on'));
+}
+
+function applySbFilter() {
+  const fromVal = document.getElementById('sb-from').value;
+  const toVal   = document.getElementById('sb-to').value;
+  if (!sbQuickSel && fromVal) {
+    sbFilter = { mode:'custom', from: new Date(fromVal).getTime(), to: toVal ? new Date(toVal).getTime() : null };
+  } else if (sbQuickSel) {
+    sbFilter = { mode: sbQuickSel, from: null, to: null };
+  } else {
+    toast('Pick a period or enter a date'); return;
+  }
+  closeSbFilter();
+  renderScoreboard();
 }
 
 function render() {
