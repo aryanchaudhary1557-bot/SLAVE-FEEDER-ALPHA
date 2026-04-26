@@ -700,18 +700,7 @@ function render() {
       <div class="pc-time t-${t}">${bigNum}</div>
       <div class="pc-lbl">${bigLbl}</div>
       <div class="pc-who">${p.fedBy ? 'by '+esc(p.fedBy) : ''}</div>
-      ${(() => {
-        const hist = p.history || [];
-        const total = hist.reduce((s,h) => s+(h.earning||0), 0);
-        const approved = hist.filter(h=>h.approval==='approved').length;
-        const automod  = hist.filter(h=>h.approval==='automod').length;
-        if (total === 0 && approved === 0 && automod === 0) return '';
-        return \`<div class="pc-earn">
-          <div class="pc-earn-amt">$\${total.toFixed(2)}</div>
-          <div class="pc-earn-lbl">total earned</div>
-          <div class="pc-earn-break">✅ \${approved} approved · ⚡ \${automod} automod</div>
-        </div>\`;
-      })()}
+      ${(function(){ const eh=p.history||[]; const et=eh.reduce((s,h)=>s+(h.earning||0),0); const ea=eh.filter(h=>h.approval==='approved').length; const em=eh.filter(h=>h.approval==='automod').length; if(!et&&!ea&&!em) return ''; return '<div class="pc-earn"><div class="pc-earn-amt">$'+et.toFixed(2)+'</div><div class="pc-earn-lbl">total earned</div><div class="pc-earn-break">✅ '+ea+' approved · ⚡ '+em+' automod</div></div>'; })()}
       <button class="pc-btn btn-${t}" onclick="openFeed('${p.id}')">Mark as fed</button>
       ${hist.length ? `
         <div class="hist-row">
