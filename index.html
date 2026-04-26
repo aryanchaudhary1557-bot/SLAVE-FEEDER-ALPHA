@@ -754,12 +754,15 @@ function joinCode() {
   const c = document.getElementById('join-inp').value.trim().toUpperCase();
   if (c.length !== 6) { toast('Need 6 characters'); return; }
   syncCode = c; localStorage.setItem('pf_code', c);
-  closeSync(); startPolling(); toast('Joined ' + c + '!');
+  closeSync(); startPolling(); startPpPolling(); toast('Joined ' + c + '!');
 }
 function newCode() {
   if (!confirm('Creates a fresh pet list on a new code. Old data stays.')) return;
   syncCode = mkCode(); localStorage.setItem('pf_code', syncCode);
-  pets = []; fbSave(); render(); toast('New code: ' + syncCode);
+  pets = []; fbSave(); render();
+  ppPets = {Mango:[], Lost:[]}; ppRender();
+  startPpPolling();
+  toast('New code: ' + syncCode);
 }
 
 let tT;
@@ -769,7 +772,13 @@ function toast(m) {
 }
 
 
-/* ── Personal Pets Drawer ── */
+/* ── Personal Pets polling ── */
+let ppPollTimer = null;
+function startPpPolling() {
+  clearInterval(ppPollTimer);
+  ppLoad('Mango'); ppLoad('Lost');
+  ppPollTimer = setInterval(() => { ppLoad('Mango'); ppLoad('Lost'); }, 8000);
+}
 let ppPets = { Mango: [], Lost: [] };
 let ppTab = 'Mango';
 let ppPendingApprovalId = null;
@@ -800,7 +809,7 @@ async function ppSave(person) {
 function openDrawer() {
   document.getElementById('pp-drawer').classList.add('open');
   document.getElementById('pp-backdrop').classList.add('open');
-  ppLoad('Mango'); ppLoad('Lost');
+  ppRender(); // show whatever is already loaded; polling keeps it fresh
 }
 function closeDrawer() {
   document.getElementById('pp-drawer').classList.remove('open');
@@ -922,6 +931,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 document.getElementById('code-disp') && (document.getElementById('code-disp').textContent = syncCode);
 setStatus('Code: ' + syncCode + ' — loading…');
 startPolling();
+startPpPolling();
 setInterval(render, 1000);
 </script>
 </body>
