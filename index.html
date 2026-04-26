@@ -154,6 +154,57 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .sb-cancel{width:100%;padding:12px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
 .sb-active-badge{font-size:9px;font-weight:800;background:rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:2px 6px;margin-left:4px;vertical-align:middle}
 
+
+/* earnings card on pet */
+.pc-earn{background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:6px 10px;text-align:center;margin-top:4px;width:100%}
+.pc-earn-amt{font-size:18px;font-weight:900;color:#16a34a;letter-spacing:-.5px;line-height:1}
+.pc-earn-lbl{font-size:9px;font-weight:800;color:#86efac;text-transform:uppercase;letter-spacing:.5px}
+.pc-earn-break{font-size:10px;color:#4ade80;font-weight:700;margin-top:1px}
+
+/* approval popup */
+.ap-overlay{position:fixed;inset:0;background:rgba(30,27,75,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.ap-sheet{background:#fff;border-radius:24px;padding:26px 20px;width:100%;max-width:340px;box-shadow:0 8px 40px rgba(124,111,205,.25);border-top:4px solid #7c6fcd;text-align:center}
+.ap-emoji{font-size:40px;margin-bottom:8px}
+.ap-title{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
+.ap-sub{font-size:13px;color:#9ca3af;margin-bottom:22px;line-height:1.5}
+.ap-btns{display:flex;flex-direction:column;gap:10px}
+.ap-btn-approve{padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;font-size:16px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 12px rgba(22,163,74,.3)}
+.ap-btn-automod{padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#d97706,#fbbf24);color:#fff;font-size:16px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 12px rgba(217,119,6,.25)}
+.ap-btn-skip{padding:12px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+
+/* grand total in scoreboard */
+.sb-total{background:rgba(255,255,255,.22);border-radius:10px;padding:6px 12px;text-align:center;min-width:64px}
+.sb-total-num{font-size:18px;font-weight:900;color:#fff;line-height:1}
+.sb-total-lbl{font-size:9px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px}
+
+/* personal pets drawer */
+.pp-drawer{position:fixed;top:0;right:0;height:100%;width:88%;max-width:360px;background:#f0eeff;z-index:400;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding-bottom:calc(30px + var(--sb));box-shadow:-8px 0 32px rgba(30,27,75,.18)}
+.pp-drawer.open{transform:translateX(0)}
+.pp-backdrop{position:fixed;inset:0;background:rgba(30,27,75,.45);z-index:399;opacity:0;pointer-events:none;transition:opacity .3s}
+.pp-backdrop.open{opacity:1;pointer-events:all}
+.pp-hdr{background:#7c6fcd;padding:calc(var(--st)+14px) 16px 14px;position:sticky;top:0;z-index:10}
+.pp-hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.pp-back{background:rgba(255,255,255,.2);border:none;border-radius:10px;color:#fff;font-size:18px;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pp-hdr-title{font-size:17px;font-weight:900;color:#fff;flex:1}
+.pp-tabs{display:flex;background:rgba(255,255,255,.18);border-radius:20px;padding:3px;gap:3px}
+.pp-tab{flex:1;padding:6px 0;border-radius:16px;font-size:12px;font-weight:800;cursor:pointer;color:rgba(255,255,255,.7);border:none;background:none;font-family:'Nunito',sans-serif;text-align:center;transition:all .15s}
+.pp-tab.on{background:#fff;color:#7c6fcd}
+.pp-body{padding:12px}
+.pp-add-box{background:rgba(255,255,255,.7);border:1px solid #c4b5fd;border-radius:18px;padding:14px;margin-bottom:12px}
+.pp-add-box h3{font-size:11px;font-weight:800;color:#6366f1;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.pp-add-row{display:flex;gap:8px;margin-bottom:8px}
+.pp-add-row input{flex:1;padding:10px 12px;background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;color:#1e1b4b;font-size:14px;outline:none;font-family:'Nunito',sans-serif;font-weight:700}
+.pp-add-row input::placeholder{color:#a5b4fc;font-weight:400}
+.pp-add-row select{padding:10px 6px;background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;font-size:18px;outline:none}
+.pp-add-submit{width:100%;padding:11px;border-radius:12px;border:none;background:#7c6fcd;color:#fff;font-size:14px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif}
+.pp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pp-empty{text-align:center;padding:40px 20px;color:#a5b4fc;font-size:14px;font-weight:700}
+.pp-earn-total{background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:14px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 12px rgba(22,163,74,.2)}
+.pp-earn-total .pet-lbl{font-size:12px;font-weight:900;color:rgba(255,255,255,.8);flex:1}
+.pp-earn-total .pet-amt{font-size:22px;font-weight:900;color:#fff}
+
+/* drawer open btn in header */
+.pp-open-btn{background:rgba(255,255,255,.2);border:none;border-radius:10px;color:#fff;font-size:16px;cursor:pointer;padding:5px 10px;font-family:'Nunito',sans-serif;font-weight:800;white-space:nowrap}
 /* syncing spinner */
 .spin{display:inline-block;width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -171,6 +222,7 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
   </div>
   <div class="hdr-bot">
     <span class="sync-txt" id="sync-txt">Connecting…</span>
+    <button class="pp-open-btn" onclick="openDrawer()">🐾 My Pets</button>
     <button class="sync-btn" onclick="openSync()">🔗 Sync code</button>
   </div>
 </div>
@@ -192,6 +244,10 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
       <div class="sb-name">🍂 Lost</div>
       <div class="sb-num" id="sb-num-lost">0</div>
       <div class="sb-lbl" id="sb-lbl-lost">feedings</div>
+    </div>
+    <div class="sb-total">
+      <div class="sb-total-num" id="sb-grand-total">$0</div>
+      <div class="sb-total-lbl">earned</div>
     </div>
   </div>
 </div>
@@ -284,6 +340,55 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
   </div>
 </div>
 
+
+<!-- Approval popup -->
+<div class="ap-overlay" id="ap-overlay" style="display:none">
+  <div class="ap-sheet">
+    <div class="ap-emoji">💰</div>
+    <div class="ap-title" id="ap-title">Task result?</div>
+    <div class="ap-sub" id="ap-sub">Was this task approved or caught by automod?</div>
+    <div class="ap-btns">
+      <button class="ap-btn-approve" onclick="setApproval('approved')">✅ Approved — $2.00</button>
+      <button class="ap-btn-automod" onclick="setApproval('automod')">⚡ Automod — $0.50</button>
+      <button class="ap-btn-skip"   onclick="setApproval(null)">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Personal Pets Drawer -->
+<div class="pp-backdrop" id="pp-backdrop" onclick="closeDrawer()"></div>
+<div class="pp-drawer" id="pp-drawer">
+  <div class="pp-hdr">
+    <div class="pp-hdr-top">
+      <button class="pp-back" onclick="closeDrawer()">✕</button>
+      <div class="pp-hdr-title">🐾 Personal Pets</div>
+    </div>
+    <div class="pp-tabs">
+      <button class="pp-tab on" id="ppt-mango" onclick="switchPpTab('Mango')">🌿 Mango</button>
+      <button class="pp-tab"    id="ppt-lost"  onclick="switchPpTab('Lost')">🍂 Lost</button>
+    </div>
+  </div>
+  <div class="pp-body">
+    <div class="pp-earn-total">
+      <div class="pet-lbl" id="pp-earn-lbl">Mango's total earnings</div>
+      <div class="pet-amt" id="pp-earn-amt">$0.00</div>
+    </div>
+    <div class="pp-add-box">
+      <h3 id="pp-add-title">Add Mango's pet</h3>
+      <div class="pp-add-row">
+        <select id="pp-new-emoji">
+          <option>🐶</option><option>🐱</option><option>🐰</option>
+          <option>🐹</option><option>🐦</option><option>🐠</option>
+          <option>🦎</option><option>🐢</option><option>🐍</option><option>🐾</option>
+        </select>
+        <input id="pp-new-name" placeholder="Pet name" maxlength="14"
+          onkeydown="if(event.key==='Enter')ppAddPet()"/>
+      </div>
+      <button class="pp-add-submit" onclick="ppAddPet()">+ Add Pet</button>
+    </div>
+    <div class="pp-grid" id="pp-grid"></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -387,7 +492,10 @@ function pickQ(h) {
 function clearQ() { selQ = null; document.querySelectorAll('.qb:not(.feed-who-btn)').forEach(b => b.classList.remove('on')); }
 function closeFeed() { document.getElementById('feed-overlay').style.display = 'none'; pendingId = null; }
 
+let pendingApprovalId = null;
+
 function confirmFeed() {
+  if (window._ppFeedActive) { ppConfirmFeed(); return; }
   const cv = parseFloat(document.getElementById('custom-h').value);
   const h = selQ || (isNaN(cv) ? null : cv);
   if (!feedWho) { toast('Choose who is feeding first!'); return; }
@@ -396,10 +504,42 @@ function confirmFeed() {
   const now = Date.now();
   p.lastFed = now; p.fedBy = feedWho; p.nextAt = now + h * 3600000;
   if (!p.history) p.history = [];
-  p.history.unshift({time:now, who:feedWho, hours:h});
+  p.history.unshift({time:now, who:feedWho, hours:h, approval:null, earning:0});
   if (p.history.length > 20) p.history = p.history.slice(0, 20);
+  pendingApprovalId = p.id;
   fbSave(); render(); closeFeed();
   toast(p.name + ' fed by ' + feedWho + '! Next in ' + fmtH(h));
+  // open approval popup
+  document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
+  document.getElementById('ap-sub').textContent = 'Was this task approved or caught by automod?';
+  document.getElementById('ap-overlay').style.display = 'flex';
+}
+
+function setApproval(type) {
+  document.getElementById('ap-overlay').style.display = 'none';
+  const earning = type === 'approved' ? 2.00 : 0.50;
+  // personal pet approval
+  if (ppPendingApprovalId) {
+    const person = window._ppApprovalPerson;
+    const p = ppPets[person] && ppPets[person].find(x=>x.id===ppPendingApprovalId);
+    if (p && type && p.history && p.history[0]) {
+      p.history[0].approval = type;
+      p.history[0].earning  = earning;
+      ppSave(person); ppRender();
+      toast(type==='approved'?'✅ $2.00 earned!':'⚡ $0.50 earned (automod)');
+    }
+    ppPendingApprovalId = null; window._ppApprovalPerson = null; return;
+  }
+  // shared pet approval
+  if (!type || !pendingApprovalId) { pendingApprovalId = null; return; }
+  const p = pets.find(x => x.id === pendingApprovalId); if (!p) return;
+  if (p.history && p.history[0]) {
+    p.history[0].approval = type;
+    p.history[0].earning  = earning;
+  }
+  pendingApprovalId = null;
+  fbSave(); render();
+  toast(type === 'approved' ? '✅ $2.00 earned!' : '⚡ $0.50 earned (automod)');
 }
 
 function getSt(p) {
@@ -472,6 +612,10 @@ function renderScoreboard() {
   document.getElementById('sb-lost').classList.toggle('sb-winner',  lostWins  && !tied);
   document.getElementById('sb-lbl-mango').textContent = (mangoWins && !tied) ? 'feedings 👑' : 'feedings';
   document.getElementById('sb-lbl-lost').textContent  = (lostWins  && !tied) ? 'feedings 👑' : 'feedings';
+  // grand total earnings
+  let grandTotal = 0;
+  pets.forEach(p => { (p.history||[]).forEach(h => { grandTotal += (h.earning||0); }); });
+  document.getElementById('sb-grand-total').textContent = '$' + grandTotal.toFixed(2);
   // badge & subtitle
   const labels = { today:'Today', week:'This week', month:'This month', all:'All-time', custom:'Custom range' };
   const badge = document.getElementById('sb-badge');
@@ -556,6 +700,18 @@ function render() {
       <div class="pc-time t-${t}">${bigNum}</div>
       <div class="pc-lbl">${bigLbl}</div>
       <div class="pc-who">${p.fedBy ? 'by '+esc(p.fedBy) : ''}</div>
+      ${(() => {
+        const hist = p.history || [];
+        const total = hist.reduce((s,h) => s+(h.earning||0), 0);
+        const approved = hist.filter(h=>h.approval==='approved').length;
+        const automod  = hist.filter(h=>h.approval==='automod').length;
+        if (total === 0 && approved === 0 && automod === 0) return '';
+        return \`<div class="pc-earn">
+          <div class="pc-earn-amt">$\${total.toFixed(2)}</div>
+          <div class="pc-earn-lbl">total earned</div>
+          <div class="pc-earn-break">✅ \${approved} approved · ⚡ \${automod} automod</div>
+        </div>\`;
+      })()}
       <button class="pc-btn btn-${t}" onclick="openFeed('${p.id}')">Mark as fed</button>
       ${hist.length ? `
         <div class="hist-row">
@@ -563,7 +719,7 @@ function render() {
           ${sh ? `<div class="hist-list">${hist.slice(0,5).map(h=>`
             <div class="hist-item">
               <span class="hi-who">${esc(h.who)}</span>
-              <span class="hi-rest">${fmtTime(h.time)}</span>
+              <span class="hi-rest">${fmtTime(h.time)}${h.approval ? ' · '+(h.approval==='approved'?'✅ $2.00':'⚡ $0.50') : ''}</span>
             </div>`).join('')}</div>` : ''}
         </div>` : ''}
     </div>`;
@@ -610,6 +766,156 @@ let tT;
 function toast(m) {
   const e = document.getElementById('toast'); e.textContent = m; e.classList.add('show');
   clearTimeout(tT); tT = setTimeout(()=>e.classList.remove('show'), 2500);
+}
+
+
+/* ── Personal Pets Drawer ── */
+let ppPets = { Mango: [], Lost: [] };
+let ppTab = 'Mango';
+let ppPendingApprovalId = null;
+
+function ppFbUrl(person) {
+  return FB + 'personal_' + person.toLowerCase() + '_' + syncCode + '.json';
+}
+
+async function ppLoad(person) {
+  try {
+    const r = await fetch(ppFbUrl(person));
+    const d = await r.json();
+    ppPets[person] = Array.isArray(d) ? d : (d ? Object.values(d) : []);
+    ppRender();
+  } catch(e) {}
+}
+
+async function ppSave(person) {
+  try {
+    await fetch(ppFbUrl(person), {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(ppPets[person])
+    });
+  } catch(e) {}
+}
+
+function openDrawer() {
+  document.getElementById('pp-drawer').classList.add('open');
+  document.getElementById('pp-backdrop').classList.add('open');
+  ppLoad('Mango'); ppLoad('Lost');
+}
+function closeDrawer() {
+  document.getElementById('pp-drawer').classList.remove('open');
+  document.getElementById('pp-backdrop').classList.remove('open');
+}
+
+function switchPpTab(person) {
+  ppTab = person;
+  document.getElementById('ppt-mango').classList.toggle('on', person==='Mango');
+  document.getElementById('ppt-lost').classList.toggle('on', person==='Lost');
+  document.getElementById('pp-add-title').textContent = 'Add ' + person + "'s pet";
+  document.getElementById('pp-earn-lbl').textContent = person + "'s total earnings";
+  ppRender();
+}
+
+function ppAddPet() {
+  const n = document.getElementById('pp-new-name').value.trim();
+  if (!n) { document.getElementById('pp-new-name').focus(); return; }
+  ppPets[ppTab].push({
+    id: 'pp'+Date.now(), name: n,
+    emoji: document.getElementById('pp-new-emoji').value,
+    nextAt: null, lastFed: null, fedBy: null, history: []
+  });
+  document.getElementById('pp-new-name').value = '';
+  ppSave(ppTab); ppRender(); toast(n + ' added to ' + ppTab + "'s pets!");
+}
+
+function ppRemovePet(id) {
+  const p = ppPets[ppTab].find(x=>x.id===id);
+  if (!p || !confirm('Remove ' + p.name + '?')) return;
+  ppPets[ppTab] = ppPets[ppTab].filter(x=>x.id!==id);
+  ppSave(ppTab); ppRender();
+}
+
+function ppOpenFeed(id) {
+  // reuse the main feed modal, flag as personal
+  const p = ppPets[ppTab].find(x=>x.id===id); if (!p) return;
+  pendingId = id; selQ = null; feedWho = ppTab;
+  document.getElementById('feed-title').textContent = 'Fed ' + p.name;
+  document.getElementById('feed-sub').textContent = 'How long until ' + p.name + "'s next meal?";
+  document.getElementById('confirm-who').textContent = feedWho;
+  document.getElementById('custom-h').value = '';
+  document.querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('fw-mango').classList.toggle('on', ppTab==='Mango');
+  document.getElementById('fw-lost').classList.toggle('on', ppTab==='Lost');
+  // mark as personal feed
+  window._ppFeedActive = true;
+  window._ppFeedPerson = ppTab;
+  document.getElementById('feed-overlay').style.display = 'flex';
+}
+
+function ppConfirmFeed() {
+  const cv = parseFloat(document.getElementById('custom-h').value);
+  const h = selQ || (isNaN(cv) ? null : cv);
+  if (!feedWho) { toast('Choose who is feeding first!'); return; }
+  if (!h || h < 0.5) { toast('Pick a time first!'); return; }
+  const person = window._ppFeedPerson;
+  const p = ppPets[person].find(x=>x.id===pendingId); if (!p) return;
+  const now = Date.now();
+  p.lastFed = now; p.fedBy = feedWho; p.nextAt = now + h*3600000;
+  if (!p.history) p.history = [];
+  p.history.unshift({time:now, who:feedWho, hours:h, approval:null, earning:0});
+  if (p.history.length > 20) p.history = p.history.slice(0,20);
+  ppPendingApprovalId = p.id;
+  window._ppFeedActive = false;
+  ppSave(person); ppRender(); closeFeed();
+  toast(p.name + ' fed! Next in ' + fmtH(h));
+  // open approval popup for personal pet
+  document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
+  document.getElementById('ap-sub').textContent = 'Was this task approved or caught by automod?';
+  window._ppApprovalPerson = person;
+  document.getElementById('ap-overlay').style.display = 'flex';
+}
+
+function ppRender() {
+  const pets_pp = ppPets[ppTab] || [];
+  // earnings total
+  let total = 0;
+  pets_pp.forEach(p => (p.history||[]).forEach(h => total += (h.earning||0)));
+  document.getElementById('pp-earn-amt').textContent = '$' + total.toFixed(2);
+  document.getElementById('pp-earn-lbl').textContent = ppTab + "'s total earnings";
+
+  const el = document.getElementById('pp-grid');
+  if (!pets_pp.length) {
+    el.innerHTML = '<div class="pp-empty">No pets yet!<br>Add one above 👆</div>';
+    return;
+  }
+  const order = {red:0, soon:1, none:2, ok:3};
+  const sorted = [...pets_pp].map(p=>({p,st:getSt(p)}))
+    .sort((a,b)=>order[a.st.type]-order[b.st.type]||a.st.rem-b.st.rem);
+
+  el.innerHTML = sorted.map(({p,st}) => {
+    const t = st.type;
+    const bigNum = t==='none' ? 'No meal set' : (t==='red'?'−':'') + fmtDur(t==='red'?-st.rem:st.rem);
+    const bigLbl = t==='red'?'overdue':t==='soon'?'due soon':t==='ok'?'until next meal':'tap to log';
+    const hist = p.history||[];
+    const earnTotal = hist.reduce((s,h)=>s+(h.earning||0),0);
+    const approved = hist.filter(h=>h.approval==='approved').length;
+    const automod  = hist.filter(h=>h.approval==='automod').length;
+    return `
+    <div class="pc pc-${t}">
+      <button class="pc-del" onclick="ppRemovePet('${p.id}')">×</button>
+      <div class="pc-avi avi-${t}">${p.emoji}</div>
+      <div class="pc-name">${esc(p.name)}</div>
+      <div class="pc-time t-${t}">${bigNum}</div>
+      <div class="pc-lbl">${bigLbl}</div>
+      <div class="pc-who">${p.fedBy?'by '+esc(p.fedBy):''}</div>
+      ${(earnTotal>0||approved>0||automod>0)?`<div class="pc-earn">
+        <div class="pc-earn-amt">$${earnTotal.toFixed(2)}</div>
+        <div class="pc-earn-lbl">total earned</div>
+        <div class="pc-earn-break">✅ ${approved} · ⚡ ${automod}</div>
+      </div>`:''}
+      <button class="pc-btn btn-${t}" onclick="ppOpenFeed('${p.id}')">Mark as fed</button>
+    </div>`;
+  }).join('');
 }
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
