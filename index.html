@@ -192,8 +192,10 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .ap-btn-skip{padding:12px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
 
 /* grand total in scoreboard */
-.sb-total{background:rgba(255,255,255,.22);border-radius:10px;padding:6px 12px;text-align:center;min-width:64px}
-.sb-total-num{font-size:18px;font-weight:900;color:#fff;line-height:1}
+.sb-total{background:rgba(255,255,255,.22);border-radius:10px;padding:8px 14px;text-align:center;min-width:64px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sb-total-num{font-size:26px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-1px;white-space:nowrap}
+.sb-total-num.digits-3{font-size:22px}
+.sb-total-num.digits-4plus{font-size:17px}
 .sb-total-lbl{font-size:9px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px}
 
 /* personal pets drawer */
@@ -634,7 +636,12 @@ function renderScoreboard() {
   // grand total earnings
   let grandTotal = 0;
   pets.forEach(p => { (p.history||[]).forEach(h => { grandTotal += (h.earning||0); }); });
-  document.getElementById('sb-grand-total').textContent = '$' + grandTotal.toFixed(2);
+  const gtEl = document.getElementById('sb-grand-total');
+  const gtStr = '$' + grandTotal.toFixed(2);
+  gtEl.textContent = gtStr;
+  gtEl.classList.remove('digits-3','digits-4plus');
+  if (gtStr.length >= 7) gtEl.classList.add('digits-4plus');
+  else if (gtStr.length >= 6) gtEl.classList.add('digits-3');
   // badge & subtitle
   const labels = { today:'Today', week:'This week', month:'This month', all:'All-time', custom:'Custom range' };
   const badge = document.getElementById('sb-badge');
