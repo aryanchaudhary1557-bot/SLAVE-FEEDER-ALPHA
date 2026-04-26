@@ -155,11 +155,30 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .sb-active-badge{font-size:9px;font-weight:800;background:rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:2px 6px;margin-left:4px;vertical-align:middle}
 
 
-/* earnings card on pet */
-.pc-earn{background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:6px 10px;text-align:center;margin-top:4px;width:100%}
-.pc-earn-amt{font-size:18px;font-weight:900;color:#16a34a;letter-spacing:-.5px;line-height:1}
-.pc-earn-lbl{font-size:9px;font-weight:800;color:#86efac;text-transform:uppercase;letter-spacing:.5px}
-.pc-earn-break{font-size:10px;color:#4ade80;font-weight:700;margin-top:1px}
+/* earnings card on pet — shared base */
+.pc-earn{background:#E6F1FB;border-radius:10px;padding:10px 12px;margin-top:4px;width:100%;position:relative;overflow:hidden}
+.pc-earn-amt{font-size:20px;font-weight:900;color:#0C447C;letter-spacing:-.5px;line-height:1;position:relative;z-index:1}
+.pc-earn-lbl{font-size:9px;font-weight:800;color:#185FA5;text-transform:uppercase;letter-spacing:.5px;position:relative;z-index:1}
+.pc-earn-break{font-size:10px;color:#378ADD;font-weight:700;margin-top:2px;position:relative;z-index:1}
+.pc-earn-bars{margin-top:6px;display:flex;flex-direction:column;gap:4px;position:relative;z-index:1}
+.peb-row{display:flex;align-items:center;gap:5px}
+.peb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.peb-dot-ok{background:#639922}
+.peb-dot-mod{background:#BA7517}
+.peb-track{flex:1;height:5px;background:rgba(255,255,255,.5);border-radius:4px;overflow:hidden}
+.peb-fill{height:100%;border-radius:4px;min-width:4px}
+.peb-fill-ok{background:#639922}
+.peb-fill-mod{background:#BA7517}
+.peb-num{font-size:10px;font-weight:700;min-width:12px;text-align:right}
+.peb-num-ok{color:#27500A}
+.peb-num-mod{color:#633806}
+.pe-g1::before{content:"";position:absolute;top:-14px;right:-14px;width:52px;height:52px;border-radius:50%;background:#B5D4F4;opacity:.7}
+.pe-g1::after{content:"";position:absolute;bottom:-8px;right:12px;width:32px;height:32px;border-radius:50%;background:#85B7EB;opacity:.4}
+.pe-g2{background-image:repeating-linear-gradient(45deg,#B5D4F4 0px,#B5D4F4 3px,transparent 3px,transparent 10px);background-position:right;background-size:60px 100%;background-color:#E6F1FB}
+.pe-g3::before{content:"";position:absolute;top:-18px;right:-18px;width:58px;height:58px;background:#B5D4F4;transform:rotate(45deg);opacity:.6}
+.pe-g3::after{content:"";position:absolute;top:8px;right:8px;width:28px;height:28px;background:#85B7EB;transform:rotate(45deg);opacity:.35}
+.pe-g4{background-image:radial-gradient(circle,#378ADD 1.5px,transparent 1.5px);background-size:9px 9px;background-color:#E6F1FB}
+.pe-g5-svg,.pe-g6-svg{position:absolute;top:0;right:0;width:70px;height:100%;pointer-events:none}
 
 /* approval popup */
 .ap-overlay{position:fixed;inset:0;background:rgba(30,27,75,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -700,7 +719,8 @@ function render() {
       <div class="pc-time t-${t}">${bigNum}</div>
       <div class="pc-lbl">${bigLbl}</div>
       <div class="pc-who">${p.fedBy ? 'by '+esc(p.fedBy) : ''}</div>
-      ${(function(){ const eh=p.history||[]; const et=eh.reduce((s,h)=>s+(h.earning||0),0); const ea=eh.filter(h=>h.approval==='approved').length; const em=eh.filter(h=>h.approval==='automod').length; if(!et&&!ea&&!em) return ''; return '<div class="pc-earn"><div class="pc-earn-amt">$'+et.toFixed(2)+'</div><div class="pc-earn-lbl">total earned</div><div class="pc-earn-break">✅ '+ea+' approved · ⚡ '+em+' automod</div></div>'; })()}
+      ${(function(){ const eh=p.history||[]; const et=eh.reduce((s,h)=>s+(h.earning||0),0); const ea=eh.filter(h=>h.approval==='approved').length; const em=eh.filter(h=>h.approval==='automod').length; if(!et&&!ea&&!em) return ''; const gs=['pe-g1','pe-g2','pe-g3','pe-g4','pe-g5','pe-g6']; const g=gs[Math.floor(Math.random()*gs.length)]; const svgs=g==='pe-g5'?'<svg class="pe-g5-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><circle cx="70" cy="0" r="45" fill="none" stroke="#B5D4F4" stroke-width="16"/><circle cx="70" cy="0" r="28" fill="none" stroke="#85B7EB" stroke-width="9" opacity=".5"/></svg>':g==='pe-g6'?'<svg class="pe-g6-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><polygon points="70,0 70,55 15,0" fill="#B5D4F4" opacity=".7"/><polygon points="70,30 70,80 5,80" fill="#85B7EB" opacity=".4"/></svg>':'';
+return '<div class="pc-earn '+g+'">'+(svgs)+'<div class="pc-earn-amt">$'+et.toFixed(2)+'</div>'+'<div class="pc-earn-lbl">total earned</div>'+'<div class="pc-earn-bars">'+'<div class="peb-row">'+'<div class="peb-dot peb-dot-ok"></div>'+'<div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:'+Math.round(ea/((ea+em)||1)*100)+'%"></div></div>'+'<span class="peb-num peb-num-ok">'+ea+'</span>'+'</div>'+'<div class="peb-row">'+'<div class="peb-dot peb-dot-mod"></div>'+'<div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:'+Math.round(em/((ea+em)||1)*100)+'%"></div></div>'+'<span class="peb-num peb-num-mod">'+em+'</span>'+'</div>'+'</div>'+'</div>'; })()}
       <button class="pc-btn btn-${t}" onclick="openFeed('${p.id}')">Mark as fed</button>
       ${hist.length ? `
         <div class="hist-row">
@@ -708,7 +728,7 @@ function render() {
           ${sh ? `<div class="hist-list">${hist.slice(0,5).map(h=>`
             <div class="hist-item">
               <span class="hi-who">${esc(h.who)}</span>
-              <span class="hi-rest">${fmtTime(h.time)}${h.approval ? ' · '+(h.approval==='approved'?'✅ $2.00':'⚡ $0.50') : ''}</span>
+              <span class="hi-rest">${fmtTime(h.time)}${h.approval ? ' · '+(h.approval==='approved'?'$2.00':'$0.50') : ''}</span>
             </div>`).join('')}</div>` : ''}
         </div>` : ''}
     </div>`;
@@ -906,11 +926,7 @@ function ppRender() {
       <div class="pc-time t-${t}">${bigNum}</div>
       <div class="pc-lbl">${bigLbl}</div>
       <div class="pc-who">${p.fedBy?'by '+esc(p.fedBy):''}</div>
-      ${(earnTotal>0||approved>0||automod>0)?`<div class="pc-earn">
-        <div class="pc-earn-amt">$${earnTotal.toFixed(2)}</div>
-        <div class="pc-earn-lbl">total earned</div>
-        <div class="pc-earn-break">✅ ${approved} · ⚡ ${automod}</div>
-      </div>`:''}
+      ${(function(){ if(!earnTotal&&!approved&&!automod) return ''; const gs=['pe-g1','pe-g2','pe-g3','pe-g4','pe-g5','pe-g6']; const g=gs[Math.floor(Math.random()*gs.length)]; const svgs=g==='pe-g5'?'<svg class="pe-g5-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><circle cx="70" cy="0" r="45" fill="none" stroke="#B5D4F4" stroke-width="16"/><circle cx="70" cy="0" r="28" fill="none" stroke="#85B7EB" stroke-width="9" opacity=".5"/></svg>':g==='pe-g6'?'<svg class="pe-g6-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><polygon points="70,0 70,55 15,0" fill="#B5D4F4" opacity=".7"/><polygon points="70,30 70,80 5,80" fill="#85B7EB" opacity=".4"/></svg>':''; const tot=approved+automod||1; return '<div class="pc-earn '+g+'">'+svgs+'<div class="pc-earn-amt">$'+earnTotal.toFixed(2)+'</div><div class="pc-earn-lbl">total earned</div><div class="pc-earn-bars"><div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:'+Math.round(approved/tot*100)+'%"></div></div><span class="peb-num peb-num-ok">'+approved+'</span></div><div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:'+Math.round(automod/tot*100)+'%"></div></div><span class="peb-num peb-num-mod">'+automod+'</span></div></div></div>'; })()}
       <button class="pc-btn btn-${t}" onclick="ppOpenFeed('${p.id}')">Mark as fed</button>
     </div>`;
   }).join('');
