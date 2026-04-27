@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>History Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#f0eeff;color:#1e1b4b;min-height:100vh;padding:20px}
+h1{font-size:20px;font-weight:900;margin-bottom:4px;color:#1e1b4b}
+.sub{font-size:13px;color:#7c6fcd;margin-bottom:20px;font-weight:700}
+.controls{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(124,111,205,.1)}
+.controls label{font-size:12px;font-weight:800;color:#7c6fcd;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+select,input{padding:10px 12px;border:1.5px solid #c4b5fd;border-radius:10px;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;color:#1e1b4b;background:#f5f3ff;outline:none;flex:1;min-width:140px}
+select:focus,input:focus{border-color:#7c6fcd;background:#fff}
+button{padding:10px 18px;border:none;border-radius:10px;font-size:13px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap}
+.btn-load{background:#7c6fcd;color:#fff}
+.btn-save{background:#16a34a;color:#fff;width:100%;padding:14px;font-size:15px;border-radius:12px;margin-top:16px}
+.btn-save:disabled{background:#d1d5db;cursor:not-allowed}
+.status{font-size:13px;font-weight:700;padding:10px 14px;border-radius:10px;margin-bottom:12px;display:none}
+.status.ok{background:#dcfce7;color:#15803d;display:block}
+.status.err{background:#fee2e2;color:#dc2626;display:block}
+.status.info{background:#ede9fe;color:#7c6fcd;display:block}
+.entries{display:flex;flex-direction:column;gap:10px}
+.entry{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(124,111,205,.08);display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.entry-left{}
+.entry-date{font-size:12px;font-weight:800;color:#7c6fcd}
+.entry-who{font-size:11px;color:#a5b4fc;font-weight:700;margin-top:1px}
+.entry-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.earn-input{width:80px;padding:7px 10px;border:1.5px solid #c4b5fd;border-radius:8px;font-size:14px;font-weight:900;font-family:'Nunito',sans-serif;color:#16a34a;background:#f0fdf4;text-align:center}
+.earn-input:focus{border-color:#16a34a;outline:none}
+.apv-btn{padding:6px 12px;border-radius:8px;border:1.5px solid transparent;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s}
+.apv-btn.approved{background:#dcfce7;color:#15803d;border-color:#86efac}
+.apv-btn.automod{background:#fef3c7;color:#d97706;border-color:#fcd34d}
+.apv-btn.none{background:#f3f4f6;color:#9ca3af;border-color:#e5e7eb}
+.apv-btn.on{box-shadow:0 0 0 2px currentColor}
+.no-earn{background:#f9fafb;color:#d1d5db;border-color:#e5e7eb}
+.summary{background:#ede9fe;border-radius:12px;padding:12px 16px;margin-bottom:12px;display:none}
+.summary-title{font-size:12px;font-weight:800;color:#7c6fcd;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.summary-val{font-size:22px;font-weight:900;color:#1e1b4b}
+.summary-break{font-size:12px;color:#a5b4fc;font-weight:700;margin-top:2px}
+.empty{text-align:center;color:#a5b4fc;padding:40px;font-weight:700}
+</style>
+</head>
+<body>
+<h1>📋 History Editor</h1>
+<p class="sub">Edit earning & approval for past feedings</p>
+
+<div class="controls">
+  <div class="row">
+    <div style="flex:1;min-width:140px">
+      <label>Sync Code</label>
+      <input id="code-inp" value="J6BEDH" maxlength="6" style="text-transform:uppercase"/>
+    </div>
+    <div style="flex:2;min-width:160px">
+      <label>Pet</label>
+      <select id="pet-sel"><option value="">— load pets —</option></select>
+    </div>
+    <button class="btn-load" onclick="loadPets()">Load</button>
+  </div>
+</div>
+
+<div class="status" id="status"></div>
+<div class="summary" id="summary">
+  <div class="summary-title">Total earnings in view</div>
+  <div class="summary-val" id="sum-val">$0.00</div>
+  <div class="summary-break" id="sum-break"></div>
+</div>
+
+<div class="entries" id="entries"><div class="empty">Load a pet to start editing</div></div>
+<button class="btn-save" id="save-btn" onclick="saveAll()" disabled>💾 Save all changes to Firebase</button>
+
+<script>
+const FB = 'https://slave-feeder-default-rtdb.firebaseio.com/';
+let allPets = [];
+let history = [];
+let currentPetId = null;
+let syncCode = 'J6BEDH';
+
+function setStatus(msg, type='info') {
+  const s = document.getElementById('status');
+  s.textContent = msg;
+  s.className = 'status ' + type;
+}
+
+function fmt(ts) {
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) + ' ' +
+         d.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
+}
+
+async function loadPets() {
+  syncCode = document.getElementById('code-inp').value.trim().toUpperCase();
+  if (syncCode.length !== 6) { setStatus('Enter a valid 6-letter code', 'err'); return; }
+  setStatus('Loading pets…', 'info');
+  try {
+    const r = await fetch(FB + 'pets_' + syncCode + '.json');
+    const d = await r.json();
+    allPets = Array.isArray(d) ? d : (d ? Object.values(d) : []);
+    const sel = document.getElementById('pet-sel');
+    sel.innerHTML = '<option value="">— choose a pet —</option>' +
+      allPets.map(p => `<option value="${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('');
+    sel.onchange = () => loadHistory(sel.value);
+    setStatus('Loaded ' + allPets.length + ' pets — pick one below', 'ok');
+  } catch(e) { setStatus('Failed to load: ' + e.message, 'err'); }
+}
+
+async function loadHistory(petId) {
+  if (!petId) return;
+  currentPetId = petId;
+  const pet = allPets.find(p => p.id === petId);
+  if (!pet) return;
+  setStatus('Loading history for ' + pet.name + '…', 'info');
+  history = Array.isArray(pet.history) ? [...pet.history] : [];
+  renderEntries(pet);
+  setStatus('Showing ' + history.length + ' entries for ' + pet.name, 'ok');
+  document.getElementById('save-btn').disabled = false;
+}
+
+function renderEntries(pet) {
+  const el = document.getElementById('entries');
+  if (!history.length) { el.innerHTML = '<div class="empty">No history entries for this pet</div>'; updateSummary(); return; }
+  el.innerHTML = history.map((h, i) => `
+    <div class="entry" id="entry-${i}">
+      <div class="entry-left">
+        <div class="entry-date">${fmt(h.time)}</div>
+        <div class="entry-who">Fed by ${h.who || 'unknown'} · ${h.hours}h interval</div>
+        <div class="entry-controls">
+          <span style="font-size:12px;font-weight:800;color:#6b7280">$</span>
+          <input class="earn-input" type="number" min="0" step="0.5" value="${h.earning !== undefined ? h.earning : ''}" placeholder="0.00"
+            oninput="updateEntry(${i},'earning',this.value)" />
+          <button class="apv-btn approved ${h.approval==='approved'?'on':''}" onclick="setApproval(${i},'approved')">✓ Approved</button>
+          <button class="apv-btn automod ${h.approval==='automod'?'on':''}" onclick="setApproval(${i},'automod')">⚡ Automod</button>
+          <button class="apv-btn none ${!h.approval?'on':''}" onclick="setApproval(${i},'')">✕ None</button>
+        </div>
+      </div>
+    </div>`).join('');
+  updateSummary();
+}
+
+function updateEntry(i, field, val) {
+  if (field === 'earning') history[i].earning = val === '' ? undefined : parseFloat(val) || 0;
+  updateSummary();
+}
+
+function setApproval(i, val) {
+  history[i].approval = val || undefined;
+  // Update button states
+  const entry = document.getElementById('entry-'+i);
+  entry.querySelectorAll('.apv-btn').forEach(b => b.classList.remove('on'));
+  if (val === 'approved') entry.querySelector('.approved').classList.add('on');
+  else if (val === 'automod') entry.querySelector('.automod').classList.add('on');
+  else entry.querySelector('.none').classList.add('on');
+  updateSummary();
+}
+
+function updateSummary() {
+  const total = history.reduce((s,h) => s + (h.earning||0), 0);
+  const approved = history.filter(h=>h.approval==='approved').length;
+  const automod = history.filter(h=>h.approval==='automod').length;
+  const s = document.getElementById('summary');
+  s.style.display = history.length ? 'block' : 'none';
+  document.getElementById('sum-val').textContent = '$' + total.toFixed(2);
+  document.getElementById('sum-break').textContent = approved + ' approved · ' + automod + ' automod · ' + (history.length - approved - automod) + ' unset';
+}
+
+async function saveAll() {
+  if (!currentPetId) return;
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Saving…';
+  setStatus('Saving to Firebase…', 'info');
+  try {
+    // Get fresh pet list, update just this pet's history
+    const r = await fetch(FB + 'pets_' + syncCode + '.json');
+    let pets = await r.json();
+    pets = Array.isArray(pets) ? pets : Object.values(pets);
+    const idx = pets.findIndex(p => p.id === currentPetId);
+    if (idx === -1) throw new Error('Pet not found in Firebase');
+    // Clean history — remove undefined fields
+    pets[idx].history = history.map(h => {
+      const entry = {time: h.time, who: h.who, hours: h.hours};
+      if (h.earning !== undefined && h.earning !== '') entry.earning = parseFloat(h.earning);
+      if (h.approval) entry.approval = h.approval;
+      return entry;
+    });
+    await fetch(FB + 'pets_' + syncCode + '.json', {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(pets)
+    });
+    setStatus('✅ Saved successfully! The app will update within seconds.', 'ok');
+  } catch(e) {
+    setStatus('❌ Save failed: ' + e.message, 'err');
+  }
+  btn.disabled = false;
+  btn.textContent = '💾 Save all changes to Firebase';
+}
+
+// Auto-load on start
+loadPets();
+</script>
+</body>
+</html>
