@@ -74,9 +74,10 @@ button{padding:10px 18px;border:none;border-radius:10px;font-size:13px;font-weig
 
 <script>
 const FB = 'https://slave-feeder-default-rtdb.firebaseio.com/';
-let allPets = [];
+let allPets = [], ppMango = [], ppLost = [];
 let history = [];
 let currentPetId = null;
+let currentSource = 'shared';
 let syncCode = 'J6BEDH';
 
 function setStatus(msg, type='info') {
@@ -91,31 +92,44 @@ function fmt(ts) {
          d.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
 }
 
+function toArr(d) { return Array.isArray(d) ? d : (d ? Object.values(d) : []); }
+
 async function loadPets() {
   syncCode = document.getElementById('code-inp').value.trim().toUpperCase();
   if (syncCode.length !== 6) { setStatus('Enter a valid 6-letter code', 'err'); return; }
-  setStatus('Loading pets…', 'info');
+  setStatus('Loading all pets…', 'info');
   try {
-    const r = await fetch(FB + 'pets_' + syncCode + '.json');
-    const d = await r.json();
-    allPets = Array.isArray(d) ? d : (d ? Object.values(d) : []);
+    const [rs, rm, rl] = await Promise.all([
+      fetch(FB + 'pets_' + syncCode + '.json'),
+      fetch(FB + 'personal_mango_' + syncCode + '.json'),
+      fetch(FB + 'personal_lost_' + syncCode + '.json')
+    ]);
+    allPets = toArr(await rs.json());
+    ppMango = toArr(await rm.json());
+    ppLost  = toArr(await rl.json());
     const sel = document.getElementById('pet-sel');
-    sel.innerHTML = '<option value="">— choose a pet —</option>' +
-      allPets.map(p => `<option value="${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('');
+    let opts = '<option value="">— choose a pet —</option>';
+    if (allPets.length) opts += '<optgroup label="🐾 Shared Pets">'   + allPets.map(p => `<option value="shared:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
+    if (ppMango.length) opts += '<optgroup label="🌿 Mango's Pets">' + ppMango.map(p => `<option value="mango:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
+    if (ppLost.length)  opts += '<optgroup label="🍂 Lost's Pets">'  + ppLost.map(p  => `<option value="lost:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
+    sel.innerHTML = opts;
     sel.onchange = () => loadHistory(sel.value);
-    setStatus('Loaded ' + allPets.length + ' pets — pick one below', 'ok');
+    const total = allPets.length + ppMango.length + ppLost.length;
+    setStatus('Loaded ' + total + ' pets (' + allPets.length + ' shared, ' + ppMango.length + ' Mango, ' + ppLost.length + ' Lost)', 'ok');
   } catch(e) { setStatus('Failed to load: ' + e.message, 'err'); }
 }
 
-async function loadHistory(petId) {
-  if (!petId) return;
-  currentPetId = petId;
-  const pet = allPets.find(p => p.id === petId);
+async function loadHistory(val) {
+  if (!val) return;
+  const [source, petId] = val.split(':');
+  currentSource = source; currentPetId = petId;
+  const list = source === 'shared' ? allPets : source === 'mango' ? ppMango : ppLost;
+  const pet = list.find(p => p.id === petId);
   if (!pet) return;
-  setStatus('Loading history for ' + pet.name + '…', 'info');
   history = Array.isArray(pet.history) ? [...pet.history] : [];
   renderEntries(pet);
-  setStatus('Showing ' + history.length + ' entries for ' + pet.name, 'ok');
+  const who = source === 'mango' ? ' (🌿 Mango)' : source === 'lost' ? ' (🍂 Lost)' : '';
+  setStatus('Showing ' + history.length + ' entries for ' + pet.name + who, 'ok');
   document.getElementById('save-btn').disabled = false;
 }
 
@@ -172,26 +186,25 @@ async function saveAll() {
   btn.disabled = true;
   btn.textContent = '⏳ Saving…';
   setStatus('Saving to Firebase…', 'info');
+  const fbKey = currentSource === 'shared' ? 'pets_' : 'personal_' + currentSource + '_';
   try {
-    // Get fresh pet list, update just this pet's history
-    const r = await fetch(FB + 'pets_' + syncCode + '.json');
+    const r = await fetch(FB + fbKey + syncCode + '.json');
     let pets = await r.json();
     pets = Array.isArray(pets) ? pets : Object.values(pets);
     const idx = pets.findIndex(p => p.id === currentPetId);
     if (idx === -1) throw new Error('Pet not found in Firebase');
-    // Clean history — remove undefined fields
     pets[idx].history = history.map(h => {
       const entry = {time: h.time, who: h.who, hours: h.hours};
       if (h.earning !== undefined && h.earning !== '') entry.earning = parseFloat(h.earning);
       if (h.approval) entry.approval = h.approval;
       return entry;
     });
-    await fetch(FB + 'pets_' + syncCode + '.json', {
+    await fetch(FB + fbKey + syncCode + '.json', {
       method: 'PUT',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(pets)
     });
-    setStatus('✅ Saved successfully! The app will update within seconds.', 'ok');
+    setStatus('✅ Saved! The app will update within seconds.', 'ok');
   } catch(e) {
     setStatus('❌ Save failed: ' + e.message, 'err');
   }
