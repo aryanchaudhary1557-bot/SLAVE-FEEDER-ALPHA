@@ -110,8 +110,8 @@ async function loadPets() {
     const sel = document.getElementById('pet-sel');
     let opts = '<option value="">— choose a pet —</option>';
     if (allPets.length) opts += '<optgroup label="🐾 Shared Pets">'   + allPets.map(p => `<option value="shared:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
-    if (ppMango.length) opts += '<optgroup label="🌿 Mango's Pets">' + ppMango.map(p => `<option value="mango:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
-    if (ppLost.length)  opts += '<optgroup label="🍂 Lost's Pets">'  + ppLost.map(p  => `<option value="lost:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
+    if (ppMango.length) opts += '<optgroup label="🌿 Mango Pets">' + ppMango.map(p => `<option value="mango:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
+    if (ppLost.length)  opts += '<optgroup label="🍂 Lost Pets">'  + ppLost.map(p  => `<option value="lost:${p.id}">${p.emoji||'🐾'} ${p.name}</option>`).join('') + '</optgroup>';
     sel.innerHTML = opts;
     sel.onchange = () => loadHistory(sel.value);
     const total = allPets.length + ppMango.length + ppLost.length;
