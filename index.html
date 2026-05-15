@@ -64,8 +64,8 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .pc-del:hover{color:#9ca3af}
 
 /* gear button */
-.pc-gear{position:absolute;top:8px;left:8px;background:none;border:none;color:#c4b5fd;font-size:13px;cursor:pointer;line-height:1;padding:2px}
-.pc-gear:hover{color:#7c6fcd}
+.pc-gear{position:absolute;top:6px;left:6px;background:rgba(124,111,205,.15);border:none;color:#7c6fcd;font-size:16px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:7px;z-index:2;font-weight:900}
+.pc-gear:hover{background:rgba(124,111,205,.28)}
 
 .pc-avi{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;margin-bottom:2px}
 .avi-red {background:#fee2e2}
@@ -794,15 +794,19 @@ function renderScoreboard() {
   document.getElementById('sb-lbl-mango').textContent = (mangoWins && !tied) ? 'feedings 👑' : 'feedings';
   document.getElementById('sb-lbl-lost').textContent  = (lostWins  && !tied) ? 'feedings 👑' : 'feedings';
 
-  // Grand total: prefer terminal stats total_pending_payout, fallback to history sum
-  let grandTotal, isLocal = false;
-  if (terminalStats && typeof terminalStats.total_pending_payout === 'number') {
-    grandTotal = terminalStats.total_pending_payout;
-  } else {
-    grandTotal = 0;
-    pets.forEach(p => { (p.history||[]).forEach(h => { grandTotal += (h.earning||0); }); });
-    isLocal = true;
-  }
+  // Grand total: linked pets use terminal pending_payout, unlinked use history earnings
+  let grandTotal = 0;
+  let anyLinked = false;
+  pets.forEach(p => {
+    const td = getTerminalDataForPet(p);
+    if (td) {
+      grandTotal += (td.pending_payout || 0);
+      anyLinked = true;
+    } else {
+      (p.history||[]).forEach(h => { grandTotal += (h.earning||0); });
+    }
+  });
+  const isLocal = !anyLinked;
   const gtEl = document.getElementById('sb-grand-total');
   const gtStr = '$' + grandTotal.toFixed(2) + (isLocal ? '' : '');
   gtEl.textContent = gtStr;
