@@ -693,10 +693,9 @@ function confirmFeed() {
   document.getElementById('ap-overlay').style.display = 'flex';
 }
 
-// ── assignCredit — FIX: saves history properly so scoreboard counts it ──────────
+// assignCredit — assigns a task to Mango or Lost, then shows approval popup
 function assignCredit(id, targetWho) {
   const p = pets.find(x => x.id === id); if (!p) return;
-  const td = getTerminalDataForPet(p);
   const now = Date.now();
   p.fedBy = targetWho;
   if (!p.history) p.history = [];
@@ -704,11 +703,16 @@ function assignCredit(id, targetWho) {
     time: now,
     who: targetWho,
     hours: 0,
-    approval: 'approved',
-    earning: td ? (td.pending_payout || 0) : 0
+    approval: null,
+    earning: 0
   });
   if (p.history.length > 20) p.history = p.history.slice(0, 20);
-  fbSave(); render(); toast('Assigned to ' + targetWho + '!');
+  pendingApprovalId = p.id;
+  fbSave(); render();
+  document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
+  document.getElementById('ap-sub').textContent = 'Assigned to ' + targetWho + ' — was it approved or automodded?';
+  window._ppApprovalPerson = null;
+  document.getElementById('ap-overlay').style.display = 'flex';
 }
 
 function setApproval(type, amount) {
@@ -753,8 +757,10 @@ function getSt(p) {
 // Non-frozen accounts tick down in real-time by subtracting elapsed since updated_at.
 function getLiveRemaining(td) {
   if (!td) return null;
-  const frozen = !!td.frozen;
-  // If frozen, remaining_seconds does not change until claimer pushes a new value
+  // frozen flag: explicitly set, OR remaining_seconds is at or above the full
+  // 12-hour cooldown (43200s) which means the account hasn't submitted a task
+  // yet — don't tick these down, keep them pinned at the fixed value.
+  const frozen = !!td.frozen || (td.remaining_seconds >= 43199);
   if (frozen) return Math.max(0, td.remaining_seconds);
   // Non-frozen: subtract elapsed time since the claimer last pushed
   const elapsed = (Date.now() / 1000) - (td.updated_at || 0);
@@ -764,7 +770,7 @@ function getLiveRemaining(td) {
 function getStForLinked(p, td) {
   if (!td) return getSt(p);
   const liveRem = getLiveRemaining(td);
-  const frozen = !!td.frozen;
+  const frozen = !!td.frozen || (td.remaining_seconds >= 43199);
   // Claimer offline >2 min → fall back to local timer
   const elapsed = (Date.now() / 1000) - (td.updated_at || 0);
   if (elapsed > 120 && p.nextAt) return getSt(p);
@@ -946,12 +952,12 @@ function render() {
     let bigNum, bigLbl, timeClass;
     if (td) {
       const liveRem = getLiveRemaining(td);
-      const frozen = !!td.frozen;
+      const frozen = !!td.frozen || (td.remaining_seconds >= 43199);
       if (liveRem <= 0) {
         bigNum = '✓ ready'; bigLbl = 'account ready'; timeClass = 't-ready';
       } else {
         bigNum = fmtDur(liveRem * 1000);
-        bigLbl = (frozen ? '🔒 frozen · ' : '') + (liveRem < 3600 ? 'due soon' : 'cooldown');
+        bigLbl = (frozen ? '📌 not started · ' : '') + (liveRem < 3600 ? 'due soon' : 'cooldown');
         timeClass = liveRem < 3600 ? 't-soon' : 't-ok';
       }
     } else {
@@ -963,30 +969,24 @@ function render() {
     const hist = p.history || [];
     const sh = showH[p.id];
 
-    // Earnings card
+    // Earnings card — always use history-based earnings for accuracy.
+    // For linked pets we also show the account's pending payout as a secondary info line.
     let earnHtml = '';
-    if (td) {
-      const payout = td.pending_payout || 0;
-      const gs = ['pe-g1','pe-g2','pe-g3','pe-g4'];
-      const gi = pets.findIndex(x=>x.id===p.id);
-      const g = gs[gi%gs.length];
-      earnHtml = `<div class="pc-earn ${g}">
-        <div class="pc-earn-amt">$${payout.toFixed(2)}</div>
-        <div class="pc-earn-lbl">total earned</div>
-        <div class="pc-earn-break">${td.tasks_done ? td.tasks_done + ' tasks lifetime' : '0 tasks yet'}</div>
-      </div>`;
-    } else {
+    {
       const et = hist.reduce((s,h)=>s+(h.earning||0),0);
       const ea = hist.filter(h=>h.approval==='approved').length;
       const em = hist.filter(h=>h.approval==='automod').length;
-      if (et||ea||em) {
-        const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
-        const gi=pets.findIndex(x=>x.id===p.id);
-        const g=gs[gi%gs.length];
-        const tot=ea+em||1;
+      const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
+      const gi=pets.findIndex(x=>x.id===p.id);
+      const g=gs[gi%gs.length];
+      const tot=ea+em||1;
+      // Show pending payout from terminal for linked pets as extra info
+      const pendingLine = td ? `<div class="pc-earn-break">$${(td.pending_payout||0).toFixed(2)} pending · ${td.tasks_done||0} tasks</div>` : '';
+      if (et||ea||em||td) {
         earnHtml=`<div class="pc-earn ${g}">
           <div class="pc-earn-amt">$${et.toFixed(2)}</div>
-          <div class="pc-earn-lbl">total earned</div>
+          <div class="pc-earn-lbl">assigned earnings</div>
+          ${pendingLine}
           <div class="pc-earn-bars">
             <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(ea/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${ea}</span></div>
             <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(em/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${em}</span></div>
