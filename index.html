@@ -301,7 +301,7 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
     </div>
     <div class="sb-total">
       <div class="sb-total-num" id="sb-grand-total">$0</div>
-      <div class="sb-total-lbl" id="sb-grand-lbl">pending payout</div>
+      <div class="sb-total-lbl" id="sb-grand-lbl">grand total</div>
     </div>
   </div>
 </div>
@@ -718,11 +718,10 @@ function getSt(p) {
   return {type:'ok', rem};
 }
 
-// For linked pets: override nextAt from terminal data remaining_seconds
+// For linked pets: use remaining_seconds FROZEN from last Firebase poll (no live tick)
 function getStForLinked(p, td) {
   if (!td) return getSt(p);
-  // Mutate nextAt on the pet object so the 1-second ticker works naturally
-  p.nextAt = Date.now() + td.remaining_seconds * 1000;
+  // Do NOT mutate p.nextAt or tick the timer — display exactly what Firebase returned
   if (td.remaining_seconds <= 0) {
     return {type:'ok', rem:0, ready:true};
   }
@@ -813,7 +812,7 @@ function renderScoreboard() {
   gtEl.classList.remove('digits-3','digits-4plus');
   if (gtStr.length >= 7) gtEl.classList.add('digits-4plus');
   else if (gtStr.length >= 6) gtEl.classList.add('digits-3');
-  document.getElementById('sb-grand-lbl').textContent = isLocal ? 'earned (local)' : 'pending payout';
+  document.getElementById('sb-grand-lbl').textContent = 'grand total';
 
   // badge & subtitle
   const labels = { today:'Today', week:'This week', month:'This month', all:'All-time', custom:'Custom range' };
@@ -927,7 +926,7 @@ function render() {
         const g = gs[gi%gs.length];
         earnHtml = `<div class="pc-earn ${g}">
           <div class="pc-earn-amt">$${payout.toFixed(2)}</div>
-          <div class="pc-earn-lbl">pending payout</div>
+          <div class="pc-earn-lbl">total earned</div>
           ${td.tasks_done ? `<div class="pc-earn-break">${td.tasks_done} tasks lifetime</div>` : ''}
         </div>`;
       }
@@ -1179,9 +1178,9 @@ setStatus('Code: ' + syncCode + ' — loading…');
 startPolling();
 startPpPolling();
 
-// Fetch terminal stats immediately, then every 60 seconds
+// Fetch terminal stats immediately, then every 8 seconds
 fetchTerminalStats();
-setInterval(fetchTerminalStats, 60000);
+setInterval(fetchTerminalStats, 8000);
 
 setInterval(render, 1000);
 </script>
