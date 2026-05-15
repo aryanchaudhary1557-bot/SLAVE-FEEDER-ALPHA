@@ -672,16 +672,15 @@ function confirmFeed() {
   document.getElementById('ap-overlay').style.display = 'flex';
 }
 
-// ── Assign credit (linked pets — one-tap toggle) ──────────────────────────────
-function assignCredit(id) {
+// ── Assign credit (linked pets — explicit target) ──────────────────────────────
+function assignCredit(id, targetWho) {
   const p = pets.find(x => x.id === id); if (!p) return;
   const td = getTerminalDataForPet(p);
-  const newWho = (!p.fedBy || p.fedBy === 'Lost') ? 'Mango' : 'Lost';
-  p.fedBy = newWho;
+  p.fedBy = targetWho;
   if (!p.history) p.history = [];
-  p.history.unshift({time:Date.now(), who:newWho, hours:0, approval:null, earning: td ? (td.pending_payout||0) : 0});
+  p.history.unshift({time:Date.now(), who:targetWho, hours:0, approval:null, earning: td ? (td.pending_payout||0) : 0});
   if (p.history.length > 20) p.history = p.history.slice(0,20);
-  fbSave(); render(); toast('Assigned to ' + newWho + '!');
+  fbSave(); render(); toast('Assigned to ' + targetWho + '!');
 }
 
 function setApproval(type, amount) {
@@ -718,14 +717,18 @@ function getSt(p) {
   return {type:'ok', rem};
 }
 
-// For linked pets: use remaining_seconds FROZEN from last Firebase poll (no live tick)
+// For linked pets: subtract elapsed time since Firebase was last pushed so timer ticks live
 function getStForLinked(p, td) {
   if (!td) return getSt(p);
-  // Do NOT mutate p.nextAt or tick the timer — display exactly what Firebase returned
-  if (td.remaining_seconds <= 0) {
+  // How many seconds have passed since claimer last pushed to Firebase
+  const elapsed = (Date.now() / 1000) - (td.updated_at || 0);
+  const isStale = elapsed > 120; // claimer offline >2 min → fall back to local timer
+  if (isStale && p.nextAt) return getSt(p);
+  const remaining = Math.max(0, td.remaining_seconds - elapsed);
+  if (remaining <= 0) {
     return {type:'ok', rem:0, ready:true};
   }
-  const rem = td.remaining_seconds * 1000;
+  const rem = remaining * 1000;
   if (rem < 3600000) return {type:'soon', rem};
   return {type:'ok', rem};
 }
@@ -918,18 +921,16 @@ function render() {
     // Earnings card
     let earnHtml = '';
     if (td) {
-      // Terminal-linked: show pending_payout from live stats
+      // Terminal-linked: ALWAYS show earnings card (even at $0) so it's never missing
       const payout = td.pending_payout || 0;
-      if (payout > 0 || td.tasks_done > 0) {
-        const gs = ['pe-g1','pe-g2','pe-g3','pe-g4'];
-        const gi = pets.findIndex(x=>x.id===p.id);
-        const g = gs[gi%gs.length];
-        earnHtml = `<div class="pc-earn ${g}">
-          <div class="pc-earn-amt">$${payout.toFixed(2)}</div>
-          <div class="pc-earn-lbl">total earned</div>
-          ${td.tasks_done ? `<div class="pc-earn-break">${td.tasks_done} tasks lifetime</div>` : ''}
-        </div>`;
-      }
+      const gs = ['pe-g1','pe-g2','pe-g3','pe-g4'];
+      const gi = pets.findIndex(x=>x.id===p.id);
+      const g = gs[gi%gs.length];
+      earnHtml = `<div class="pc-earn ${g}">
+        <div class="pc-earn-amt">$${payout.toFixed(2)}</div>
+        <div class="pc-earn-lbl">total earned</div>
+        <div class="pc-earn-break">${td.tasks_done ? td.tasks_done + ' tasks lifetime' : '0 tasks yet'}</div>
+      </div>`;
     } else {
       // Unlinked: compute from history
       const et = hist.reduce((s,h)=>s+(h.earning||0),0);
@@ -948,9 +949,8 @@ function render() {
     // Action button
     let btnHtml = '';
     if (td) {
-      // Linked: assign credit toggle
-      const nextWho = (!p.fedBy || p.fedBy === 'Lost') ? 'Mango' : 'Lost';
-      btnHtml = `<button class="pc-btn btn-ok" onclick="assignCredit('${p.id}')">Assign to ${esc(nextWho)}</button>`;
+      // Linked: show both assign buttons explicitly
+      btnHtml = `<button class="pc-btn btn-ok" onclick="assignCredit('${p.id}','Mango')">Assign to Mango</button><button class="pc-btn btn-none" style="margin-top:3px" onclick="assignCredit('${p.id}','Lost')">Assign to Lost</button>`;
     } else {
       btnHtml = `<button class="pc-btn btn-${t}" onclick="openFeed('${p.id}')">Mark as fed</button>`;
     }
