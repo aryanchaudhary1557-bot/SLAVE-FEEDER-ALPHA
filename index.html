@@ -182,31 +182,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .pe-g4::before{content:'';position:absolute;top:0;right:0;bottom:0;width:55px;background-image:radial-gradient(circle,#378ADD 1.5px,transparent 1.5px);background-size:9px 9px;opacity:.25}
 .pe-g5-svg,.pe-g6-svg{position:absolute;top:0;right:0;width:70px;height:100%;pointer-events:none}
 
-.ap-overlay{position:fixed;inset:0;background:rgba(30,27,75,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
-.ap-sheet{background:#fff;border-radius:28px;padding:26px 20px 22px;width:100%;max-width:340px;box-shadow:0 12px 48px rgba(124,111,205,.28);border-top:5px solid #7c6fcd;text-align:center;position:relative}
-.ap-badge{position:absolute;top:-14px;right:16px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:10px;font-weight:900;padding:4px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(249,115,22,.35);letter-spacing:.5px}
-.ap-emoji{font-size:42px;margin-bottom:6px;display:block;animation:apBob 2s ease-in-out infinite}
-@keyframes apBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.ap-title{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
-.ap-sub{font-size:13px;color:#9ca3af;margin-bottom:18px;line-height:1.5}
-.ap-section-lbl{font-size:10px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;text-align:left;margin-bottom:7px}
-.ap-lbl-green{color:#16a34a}
-.ap-lbl-amber{color:#d97706}
-.ap-approve-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.ap-btn-approve{padding:14px 8px;border-radius:16px;border:none;color:#fff;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;flex-direction:column;align-items:center;gap:1px;transition:transform .12s,box-shadow .12s}
-.ap-btn-approve:active{transform:scale(.94)}
-.ap-btn-approve .ap-amt{font-size:20px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
-.ap-btn-approve .ap-lbl{font-size:10px;font-weight:800;opacity:.85}
-.apg-1{background:linear-gradient(145deg,#4ade80,#16a34a);box-shadow:0 4px 12px rgba(22,163,74,.28)}
-.apg-2{background:linear-gradient(145deg,#22c55e,#15803d);box-shadow:0 4px 12px rgba(22,163,74,.28)}
-.apg-3{background:linear-gradient(145deg,#16a34a,#166534);box-shadow:0 4px 12px rgba(22,163,74,.3)}
-.apg-4{background:linear-gradient(145deg,#15803d,#052e16);box-shadow:0 4px 12px rgba(22,163,74,.32)}
-.ap-btn-automod{width:100%;padding:14px;border-radius:16px;border:none;background:linear-gradient(145deg,#fbbf24,#d97706);color:#fff;font-size:15px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 12px rgba(217,119,6,.28);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s}
-.ap-btn-automod:active{transform:scale(.97)}
-.ap-btn-automod .ap-amt{font-size:18px;font-weight:900}
-.ap-btn-skip{width:100%;padding:11px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
-.ap-btn-skip:active{border-color:#c4b5fd;color:#7c6fcd}
-.ap-hint{font-size:11px;color:#c4b5fd;font-weight:700;margin-top:12px}
 
 .sb-total{background:rgba(255,255,255,.22);border-radius:10px;padding:8px 14px;text-align:center;min-width:64px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .sb-total-num{font-size:26px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-1px;white-space:nowrap}
@@ -390,45 +365,7 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
   </div>
 </div>
 
-<!-- Approval popup -->
-<div class="ap-overlay" id="ap-overlay" style="display:none">
-  <div class="ap-sheet">
-    <div class="ap-badge">🐾 Task Result</div>
-    <div class="ap-emoji">💰</div>
-    <div class="ap-title" id="ap-title">Task result?</div>
-    <div class="ap-sub" id="ap-sub">Was this task approved or caught by automod?</div>
 
-    <div class="ap-section-lbl ap-lbl-green">✅ Approved</div>
-    <div class="ap-approve-grid">
-      <button class="ap-btn-approve apg-1" onclick="setApproval('approved',1.80)">
-        <span class="ap-amt">$1.80</span>
-        <span class="ap-lbl">Approved</span>
-      </button>
-      <button class="ap-btn-approve apg-2" onclick="setApproval('approved',1.90)">
-        <span class="ap-amt">$1.90</span>
-        <span class="ap-lbl">Approved</span>
-      </button>
-      <button class="ap-btn-approve apg-3" onclick="setApproval('approved',2.00)">
-        <span class="ap-amt">$2.00</span>
-        <span class="ap-lbl">Approved</span>
-      </button>
-      <button class="ap-btn-approve apg-4" onclick="setApproval('approved',2.10)">
-        <span class="ap-amt">$2.10</span>
-        <span class="ap-lbl">Approved</span>
-      </button>
-    </div>
-
-    <div class="ap-section-lbl ap-lbl-amber">⚡ Automod</div>
-    <button class="ap-btn-automod" onclick="setApproval('automod',0.50)">
-      <span>⚡</span>
-      <span class="ap-amt">$0.50</span>
-      <span style="font-size:13px;opacity:.9">Automod catch</span>
-    </button>
-
-    <button class="ap-btn-skip" onclick="setApproval(null,0)">Skip for now</button>
-    <div class="ap-hint">Tap to set earning for this feeding 🐾</div>
-  </div>
-</div>
 
 <!-- Personal Pets Drawer -->
 <div class="pp-backdrop" id="pp-backdrop" onclick="closeDrawer()"></div>
@@ -670,7 +607,6 @@ function pickQ(h) {
 function clearQ() { selQ = null; document.querySelectorAll('.qb:not(.feed-who-btn)').forEach(b => b.classList.remove('on')); }
 function closeFeed() { document.getElementById('feed-overlay').style.display = 'none'; pendingId = null; window._ppFeedActive = false; }
 
-let pendingApprovalId = null;
 
 function confirmFeed() {
   if (window._ppFeedActive) { ppConfirmFeed(); return; }
@@ -684,13 +620,8 @@ function confirmFeed() {
   if (!p.history) p.history = [];
   p.history.unshift({time:now, who:feedWho, hours:h, approval:null, earning:0});
   if (p.history.length > 20) p.history = p.history.slice(0, 20);
-  pendingApprovalId = p.id;
   fbSave(); render(); closeFeed();
   toast(p.name + ' fed by ' + feedWho + '! Next in ' + fmtH(h));
-  document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
-  document.getElementById('ap-sub').textContent = 'Was this task approved or caught by automod?';
-  window._ppApprovalPerson = null;
-  document.getElementById('ap-overlay').style.display = 'flex';
 }
 
 // assignCredit — assigns a task to Mango or Lost, then shows approval popup
@@ -707,40 +638,10 @@ function assignCredit(id, targetWho) {
     earning: 0
   });
   if (p.history.length > 20) p.history = p.history.slice(0, 20);
-  pendingApprovalId = p.id;
   fbSave(); render();
-  document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
-  document.getElementById('ap-sub').textContent = 'Assigned to ' + targetWho + ' — was it approved or automodded?';
-  window._ppApprovalPerson = null;
-  document.getElementById('ap-overlay').style.display = 'flex';
+  toast('Assigned to ' + targetWho + '!');
 }
 
-function setApproval(type, amount) {
-  document.getElementById('ap-overlay').style.display = 'none';
-  const earning = (amount !== undefined && amount !== null) ? amount : (type === 'approved' ? 2.00 : 0.50);
-  const earnStr = '$' + earning.toFixed(2);
-
-  if (ppPendingApprovalId) {
-    const person = window._ppApprovalPerson;
-    const p = ppPets[person] && ppPets[person].find(x=>x.id===ppPendingApprovalId);
-    if (p && type && p.history && p.history[0]) {
-      p.history[0].approval = type;
-      p.history[0].earning  = earning;
-      ppSave(person); ppRender();
-      toast(type==='approved'?'✅ '+earnStr+' earned!':'⚡ '+earnStr+' (automod)');
-    }
-    ppPendingApprovalId = null; window._ppApprovalPerson = null; return;
-  }
-  if (!type || !pendingApprovalId) { pendingApprovalId = null; return; }
-  const p = pets.find(x => x.id === pendingApprovalId); if (!p) return;
-  if (p.history && p.history[0]) {
-    p.history[0].approval = type;
-    p.history[0].earning  = earning;
-  }
-  pendingApprovalId = null;
-  fbSave(); render();
-  toast(type === 'approved' ? '✅ '+earnStr+' earned!' : '⚡ '+earnStr+' (automod)');
-}
 
 // ── Status helpers ─────────────────────────────────────────────────────────────
 function getSt(p) {
@@ -850,7 +751,13 @@ function renderScoreboard() {
   document.getElementById('sb-lbl-mango').textContent = mangoWins ? 'feedings 👑' : 'feedings';
   document.getElementById('sb-lbl-lost').textContent  = lostWins  ? 'feedings 👑' : 'feedings';
 
-  const grandTotal = earned.Mango + earned.Lost;
+  // Grand total: sum pending_payout from all linked pets + history earnings from unlinked
+  let grandTotal = 0;
+  pets.forEach(p => {
+    const td = getTerminalDataForPet(p);
+    if (td) { grandTotal += (td.pending_payout || 0); }
+    else { (p.history||[]).forEach(h => grandTotal += (h.earning||0)); }
+  });
   const gtEl = document.getElementById('sb-grand-total');
   const gtStr = '$' + grandTotal.toFixed(2);
   gtEl.textContent = gtStr;
@@ -1096,7 +1003,6 @@ function startPpPolling() {
 }
 let ppPets = { Mango: [], Lost: [] };
 let ppTab = 'Mango';
-let ppPendingApprovalId = null;
 
 function ppFbUrl(person) {
   return FB + 'personal_' + person.toLowerCase() + '_' + syncCode + '.json';
@@ -1191,14 +1097,9 @@ function ppConfirmFeed() {
   if (!p.history) p.history = [];
   p.history.unshift({time:now, who:feedWho, hours:h, approval:null, earning:0});
   if (p.history.length > 20) p.history = p.history.slice(0,20);
-  ppPendingApprovalId = p.id;
   window._ppFeedActive = false;
   ppSave(person); ppRender(); closeFeed();
   toast(p.name + ' fed! Next in ' + fmtH(h));
-  document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
-  document.getElementById('ap-sub').textContent = 'Was this task approved or caught by automod?';
-  window._ppApprovalPerson = person;
-  document.getElementById('ap-overlay').style.display = 'flex';
 }
 
 function ppRender() {
