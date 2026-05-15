@@ -16,7 +16,6 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding-bottom:calc(60px + var(--sb));color:#1e1b4b}
 
-/* header */
 .hdr{background:#7c6fcd;padding:calc(var(--st)+14px) 16px 14px;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(124,111,205,.3)}
 .hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .hdr-title{font-size:20px;font-weight:900;color:#fff;flex:1;letter-spacing:-.3px}
@@ -27,7 +26,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .sync-txt{font-size:12px;color:rgba(255,255,255,.6)}
 .sync-btn{font-size:12px;color:#fff;background:rgba(255,255,255,.2);border:none;border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
 
-/* chips */
 .chips{display:flex;gap:8px;padding:12px 12px 0;overflow-x:auto}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:800}
@@ -36,10 +34,8 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .c-ok{background:#6366f1;color:#fff}
 .c-none{background:rgba(255,255,255,.5);color:#6b7280;border:1px solid #c4b5fd}
 
-/* page */
 .page{padding:12px}
 
-/* add card */
 .add-box{background:rgba(255,255,255,.7);border:1px solid #c4b5fd;border-radius:18px;padding:16px;margin-bottom:14px}
 .add-box h3{font-size:12px;font-weight:800;color:#6366f1;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
 .add-row{display:flex;gap:8px;margin-bottom:10px}
@@ -50,10 +46,8 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .add-submit{width:100%;padding:13px;border-radius:14px;border:none;background:#7c6fcd;color:#fff;font-size:16px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif}
 .add-submit:active{background:#6d5fc0}
 
-/* 2-col pet grid */
 .pets-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-/* pet card */
 .pc{background:#fff;border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid transparent}
 .pc-red {border-left-color:#f87171;background:#fffafa}
 .pc-ok  {border-left-color:#818cf8;background:#fafafe}
@@ -63,7 +57,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .pc-del{position:absolute;top:8px;right:8px;background:none;border:none;color:#d1d5db;font-size:18px;cursor:pointer;line-height:1;padding:2px}
 .pc-del:hover{color:#9ca3af}
 
-/* gear button */
 .pc-gear{position:absolute;top:6px;left:6px;background:rgba(124,111,205,.15);border:none;color:#7c6fcd;font-size:16px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:7px;z-index:2;font-weight:900}
 .pc-gear:hover{background:rgba(124,111,205,.28)}
 
@@ -91,7 +84,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .btn-soon{background:#fef3c7;color:#d97706}
 .btn-none{background:#ede9fe;color:#7c6fcd}
 
-/* history toggle */
 .hist-row{width:100%;margin-top:4px}
 .hist-tog{width:100%;background:none;border:none;font-size:11px;font-weight:700;color:#c4b5fd;cursor:pointer;padding:2px 0;font-family:'Nunito',sans-serif}
 .hist-list{margin-top:4px;text-align:left;width:100%}
@@ -99,7 +91,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .hi-who{font-weight:800;color:#7c6fcd;min-width:28px}
 .hi-rest{color:#a5b4fc}
 
-/* feed modal */
 .overlay{position:fixed;inset:0;background:rgba(30,27,75,.5);z-index:200;display:flex;align-items:flex-end}
 .sheet{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;border-top:4px solid #7c6fcd}
 .sheet-title{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
@@ -115,7 +106,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .confirm-btn{width:100%;padding:15px;border-radius:14px;border:none;background:#7c6fcd;color:#fff;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:10px;font-family:'Nunito',sans-serif}
 .cancel-btn{width:100%;padding:13px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:15px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
 
-/* sync modal */
 .sync-sheet{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;position:relative;border-top:4px solid #7c6fcd}
 .sync-sheet h2{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:6px}
 .sync-sheet p{font-size:14px;color:#6b7280;line-height:1.65;margin-bottom:18px}
@@ -128,7 +118,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .code-inp:focus{border-color:#7c6fcd}
 .m-close{position:absolute;top:18px;right:18px;background:#f5f3ff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#9ca3af}
 
-/* settings modal */
 .settings-sheet{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;position:relative;border-top:4px solid #7c6fcd}
 .settings-sheet h2{font-size:18px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
 .settings-sheet p{font-size:13px;color:#9ca3af;margin-bottom:18px}
@@ -139,11 +128,9 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .settings-remove{width:100%;padding:12px;border-radius:14px;border:1.5px solid #fecaca;background:none;color:#ef4444;font-size:14px;cursor:pointer;margin-bottom:10px;font-family:'Nunito',sans-serif;font-weight:700}
 .settings-cancel{width:100%;padding:12px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
 
-/* toast */
 .toast{position:fixed;bottom:calc(72px + var(--sb));left:50%;transform:translateX(-50%) translateY(8px);background:#7c6fcd;color:#fff;padding:11px 22px;border-radius:20px;font-size:14px;font-weight:800;opacity:0;transition:all .2s;pointer-events:none;z-index:300;white-space:nowrap;font-family:'Nunito',sans-serif}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* scoreboard banner */
 .scoreboard{background:linear-gradient(135deg,#7c6fcd 0%,#a78bfa 100%);border-radius:18px;padding:14px 16px;margin:10px 12px 0;box-shadow:0 4px 16px rgba(124,111,205,.28);display:flex;align-items:center;gap:10px}
 .sb-title{flex:1}
 .sb-title .sb-big{font-size:13px;font-weight:900;color:#fff}
@@ -155,7 +142,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .sb-card .sb-num{font-size:26px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-1px}
 .sb-card .sb-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.55)}
 
-/* scoreboard filter popup */
 .sb-popup-overlay{position:fixed;inset:0;background:rgba(30,27,75,.45);z-index:200;display:flex;align-items:flex-end}
 .sb-popup{background:#fff;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + var(--sb));width:100%;border-top:4px solid #7c6fcd}
 .sb-popup-title{font-size:17px;font-weight:900;color:#1e1b4b;margin-bottom:4px}
@@ -172,7 +158,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .sb-cancel{width:100%;padding:12px;border-radius:14px;border:1.5px solid #e0e7ff;background:none;color:#9ca3af;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
 .sb-active-badge{font-size:9px;font-weight:800;background:rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:2px 6px;margin-left:4px;vertical-align:middle}
 
-/* earnings card on pet — shared base */
 .pc-earn{background:#E6F1FB;border-radius:10px;padding:10px 12px;margin-top:4px;width:100%;position:relative;overflow:hidden}
 .pc-earn-amt{font-size:20px;font-weight:900;color:#0C447C;letter-spacing:-.5px;line-height:1;position:relative;z-index:1}
 .pc-earn-lbl{font-size:9px;font-weight:800;color:#185FA5;text-transform:uppercase;letter-spacing:.5px;position:relative;z-index:1}
@@ -197,7 +182,6 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .pe-g4::before{content:'';position:absolute;top:0;right:0;bottom:0;width:55px;background-image:radial-gradient(circle,#378ADD 1.5px,transparent 1.5px);background-size:9px 9px;opacity:.25}
 .pe-g5-svg,.pe-g6-svg{position:absolute;top:0;right:0;width:70px;height:100%;pointer-events:none}
 
-/* approval popup */
 .ap-overlay{position:fixed;inset:0;background:rgba(30,27,75,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
 .ap-sheet{background:#fff;border-radius:28px;padding:26px 20px 22px;width:100%;max-width:340px;box-shadow:0 12px 48px rgba(124,111,205,.28);border-top:5px solid #7c6fcd;text-align:center;position:relative}
 .ap-badge{position:absolute;top:-14px;right:16px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:10px;font-weight:900;padding:4px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(249,115,22,.35);letter-spacing:.5px}
@@ -224,14 +208,12 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .ap-btn-skip:active{border-color:#c4b5fd;color:#7c6fcd}
 .ap-hint{font-size:11px;color:#c4b5fd;font-weight:700;margin-top:12px}
 
-/* grand total in scoreboard */
 .sb-total{background:rgba(255,255,255,.22);border-radius:10px;padding:8px 14px;text-align:center;min-width:64px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .sb-total-num{font-size:26px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-1px;white-space:nowrap}
 .sb-total-num.digits-3{font-size:22px}
 .sb-total-num.digits-4plus{font-size:17px}
 .sb-total-lbl{font-size:9px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px}
 
-/* personal pets drawer */
 .pp-drawer{position:fixed;top:0;right:0;height:100%;width:88%;max-width:360px;background:#f0eeff;z-index:400;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding-bottom:calc(30px + var(--sb));box-shadow:-8px 0 32px rgba(30,27,75,.18)}
 .pp-drawer.open{transform:translateX(0)}
 .pp-backdrop{position:fixed;inset:0;background:rgba(30,27,75,.45);z-index:399;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -257,9 +239,7 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 .pp-earn-total .pet-lbl{font-size:12px;font-weight:900;color:#5F5E5A;flex:1}
 .pp-earn-total .pet-amt{font-size:22px;font-weight:900;color:#2C2C2A}
 
-/* drawer open btn in header */
 .pp-open-btn{background:rgba(255,255,255,.2);border:none;border-radius:10px;color:#fff;font-size:16px;cursor:pointer;padding:5px 10px;font-family:'Nunito',sans-serif;font-weight:800;white-space:nowrap}
-/* syncing spinner */
 .spin{display:inline-block;width:10px;height:10px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -490,13 +470,13 @@ body{font-family:'Nunito',sans-serif;background:#f0eeff;min-height:100vh;padding
 const FB = 'https://slave-feeder-default-rtdb.firebaseio.com/';
 const TERMINAL_STATS_URL = FB + 'taskflux_stats_J6BEDH.json';
 
-let pets = [], who = 'Mango', showH = {}, pendingId = null, selQ = null, fbListener = null;
+let pets = [], who = 'Mango', showH = {}, pendingId = null, selQ = null;
 let syncCode = localStorage.getItem('pf_code') || 'J6BEDH';
 localStorage.setItem('pf_code', syncCode);
 
-// ── Terminal stats (from Python claimer) ─────────────────────────────────────
-let terminalStats = null;          // full stats object from Firebase
-let terminalByEmail = {};          // lookup: email.toLowerCase() → account object
+// ── Terminal stats ─────────────────────────────────────────────────────────────
+let terminalStats = null;
+let terminalByEmail = {};
 
 async function fetchTerminalStats() {
   try {
@@ -512,10 +492,8 @@ async function fetchTerminalStats() {
       terminalStats = null;
       terminalByEmail = {};
     }
-  } catch(e) {
-    // silent fallback — keep existing terminalStats unchanged
-  }
-  render();
+  } catch(e) {}
+  // Don't call render() here — the 1-second interval handles it
 }
 
 function getTerminalDataForPet(pet) {
@@ -523,37 +501,73 @@ function getTerminalDataForPet(pet) {
   return terminalByEmail[pet.linkedEmail.toLowerCase()] || null;
 }
 
-// ── Settings modal state ──────────────────────────────────────────────────────
+// ── Settings modal ──────────────────────────────────────────────────────────────
 let settingsPetId = null;
+let ppSettingsPetId = null;
+let ppSettingsPerson = null;
 
 function openSettings(id) {
   const p = pets.find(x => x.id === id); if (!p) return;
   settingsPetId = id;
+  ppSettingsPetId = null; ppSettingsPerson = null;
   document.getElementById('settings-title').textContent = '⚙ ' + p.name + ' settings';
   document.getElementById('settings-email').value = p.linkedEmail || '';
   document.getElementById('settings-remove-btn').style.display = p.linkedEmail ? 'block' : 'none';
+  document.getElementById('settings-overlay').dataset.ppMode = '';
   document.getElementById('settings-overlay').style.display = 'flex';
   setTimeout(() => document.getElementById('settings-email').focus(), 120);
 }
 
-function closeSettings() {
-  document.getElementById('settings-overlay').style.display = 'none';
+function ppOpenSettings(id, person) {
+  const arr = ppPets[person] || [];
+  const p = arr.find(x => x.id === id); if (!p) return;
+  ppSettingsPetId = id; ppSettingsPerson = person;
   settingsPetId = null;
+  document.getElementById('settings-title').textContent = '⚙ ' + p.name + ' settings';
+  document.getElementById('settings-email').value = p.linkedEmail || '';
+  document.getElementById('settings-remove-btn').style.display = p.linkedEmail ? 'block' : 'none';
+  document.getElementById('settings-overlay').dataset.ppMode = '1';
+  document.getElementById('settings-overlay').style.display = 'flex';
+  setTimeout(() => document.getElementById('settings-email').focus(), 120);
 }
 
 function saveSettings() {
-  const p = pets.find(x => x.id === settingsPetId); if (!p) return;
+  const isPp = document.getElementById('settings-overlay').dataset.ppMode === '1';
   const val = document.getElementById('settings-email').value.trim().toLowerCase();
-  p.linkedEmail = val || undefined;
-  fbSave(); render(); closeSettings();
-  toast(val ? 'Linked to ' + val + '!' : 'Link removed');
+  if (isPp) {
+    const p = ppPets[ppSettingsPerson] && ppPets[ppSettingsPerson].find(x => x.id === ppSettingsPetId);
+    if (!p) { closeSettings(); return; }
+    p.linkedEmail = val || undefined;
+    ppSave(ppSettingsPerson); ppRender(); closeSettings();
+    toast(val ? 'Linked to ' + val + '!' : 'Link removed');
+  } else {
+    const p = pets.find(x => x.id === settingsPetId); if (!p) return;
+    p.linkedEmail = val || undefined;
+    fbSave(); render(); closeSettings();
+    toast(val ? 'Linked to ' + val + '!' : 'Link removed');
+  }
 }
 
 function removeLink() {
-  const p = pets.find(x => x.id === settingsPetId); if (!p) return;
-  delete p.linkedEmail;
-  fbSave(); render(); closeSettings();
-  toast('Link removed');
+  const isPp = document.getElementById('settings-overlay').dataset.ppMode === '1';
+  if (isPp) {
+    const p = ppPets[ppSettingsPerson] && ppPets[ppSettingsPerson].find(x => x.id === ppSettingsPetId);
+    if (!p) { closeSettings(); return; }
+    delete p.linkedEmail;
+    ppSave(ppSettingsPerson); ppRender(); closeSettings();
+    toast('Link removed');
+  } else {
+    const p = pets.find(x => x.id === settingsPetId); if (!p) return;
+    delete p.linkedEmail;
+    fbSave(); render(); closeSettings();
+    toast('Link removed');
+  }
+}
+
+function closeSettings() {
+  document.getElementById('settings-overlay').style.display = 'none';
+  document.getElementById('settings-overlay').dataset.ppMode = '';
+  settingsPetId = null; ppSettingsPetId = null; ppSettingsPerson = null;
 }
 
 function mkCode() {
@@ -563,7 +577,10 @@ function mkCode() {
 function fbUrl() { return FB + 'pets_' + syncCode + '.json'; }
 
 /* ── Firebase sync ── */
+let _isSaving = false;
+
 async function fbSave() {
+  _isSaving = true;
   try {
     await fetch(fbUrl(), {
       method: 'PUT',
@@ -572,9 +589,12 @@ async function fbSave() {
     });
     setStatus('Synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
   } catch(e) { setStatus('Sync failed — check connection'); }
+  _isSaving = false;
 }
 
 async function fbLoad() {
+  // Don't overwrite local state while a save is in flight
+  if (_isSaving) return;
   try {
     const r = await fetch(fbUrl());
     const d = await r.json();
@@ -590,7 +610,6 @@ function setStatus(msg) {
   document.getElementById('sync-txt').textContent = msg;
 }
 
-/* Poll every 8 seconds to pick up wife's changes */
 let pollTimer;
 function startPolling() {
   clearInterval(pollTimer);
@@ -639,6 +658,7 @@ function openFeed(id) {
   document.querySelectorAll('.qb').forEach(b => b.classList.remove('on'));
   document.getElementById('fw-mango').classList.toggle('on', who === 'Mango');
   document.getElementById('fw-lost').classList.toggle('on', who === 'Lost');
+  window._ppFeedActive = false;
   document.getElementById('feed-overlay').style.display = 'flex';
 }
 
@@ -669,17 +689,25 @@ function confirmFeed() {
   toast(p.name + ' fed by ' + feedWho + '! Next in ' + fmtH(h));
   document.getElementById('ap-title').textContent = 'Task result for ' + p.name + '?';
   document.getElementById('ap-sub').textContent = 'Was this task approved or caught by automod?';
+  window._ppApprovalPerson = null;
   document.getElementById('ap-overlay').style.display = 'flex';
 }
 
-// ── Assign credit (linked pets — explicit target) ──────────────────────────────
+// ── assignCredit — FIX: saves history properly so scoreboard counts it ──────────
 function assignCredit(id, targetWho) {
   const p = pets.find(x => x.id === id); if (!p) return;
   const td = getTerminalDataForPet(p);
+  const now = Date.now();
   p.fedBy = targetWho;
   if (!p.history) p.history = [];
-  p.history.unshift({time:Date.now(), who:targetWho, hours:0, approval:null, earning: td ? (td.pending_payout||0) : 0});
-  if (p.history.length > 20) p.history = p.history.slice(0,20);
+  p.history.unshift({
+    time: now,
+    who: targetWho,
+    hours: 0,
+    approval: 'approved',
+    earning: td ? (td.pending_payout || 0) : 0
+  });
+  if (p.history.length > 20) p.history = p.history.slice(0, 20);
   fbSave(); render(); toast('Assigned to ' + targetWho + '!');
 }
 
@@ -687,6 +715,7 @@ function setApproval(type, amount) {
   document.getElementById('ap-overlay').style.display = 'none';
   const earning = (amount !== undefined && amount !== null) ? amount : (type === 'approved' ? 2.00 : 0.50);
   const earnStr = '$' + earning.toFixed(2);
+
   if (ppPendingApprovalId) {
     const person = window._ppApprovalPerson;
     const p = ppPets[person] && ppPets[person].find(x=>x.id===ppPendingApprovalId);
@@ -709,6 +738,7 @@ function setApproval(type, amount) {
   toast(type === 'approved' ? '✅ '+earnStr+' earned!' : '⚡ '+earnStr+' (automod)');
 }
 
+// ── Status helpers ─────────────────────────────────────────────────────────────
 function getSt(p) {
   if (!p.nextAt) return {type:'none', rem:Infinity};
   const rem = p.nextAt - Date.now();
@@ -717,20 +747,31 @@ function getSt(p) {
   return {type:'ok', rem};
 }
 
-// For linked pets: subtract elapsed time since Firebase was last pushed so timer ticks live
+// FIX: Properly compute live remaining for linked pets.
+// frozen=true means the account's cooldown is a fixed interval (12h/24h) and
+// does NOT tick down client-side — it only resets when a task is submitted.
+// Non-frozen accounts tick down in real-time by subtracting elapsed since updated_at.
+function getLiveRemaining(td) {
+  if (!td) return null;
+  const frozen = !!td.frozen;
+  // If frozen, remaining_seconds does not change until claimer pushes a new value
+  if (frozen) return Math.max(0, td.remaining_seconds);
+  // Non-frozen: subtract elapsed time since the claimer last pushed
+  const elapsed = (Date.now() / 1000) - (td.updated_at || 0);
+  return Math.max(0, td.remaining_seconds - elapsed);
+}
+
 function getStForLinked(p, td) {
   if (!td) return getSt(p);
-  // How many seconds have passed since claimer last pushed to Firebase
+  const liveRem = getLiveRemaining(td);
+  const frozen = !!td.frozen;
+  // Claimer offline >2 min → fall back to local timer
   const elapsed = (Date.now() / 1000) - (td.updated_at || 0);
-  const isStale = elapsed > 120; // claimer offline >2 min → fall back to local timer
-  if (isStale && p.nextAt) return getSt(p);
-  const remaining = Math.max(0, td.remaining_seconds - elapsed);
-  if (remaining <= 0) {
-    return {type:'ok', rem:0, ready:true};
-  }
-  const rem = remaining * 1000;
-  if (rem < 3600000) return {type:'soon', rem};
-  return {type:'ok', rem};
+  if (elapsed > 120 && p.nextAt) return getSt(p);
+  if (liveRem <= 0) return {type:'ok', rem:0, ready:true, frozen};
+  const remMs = liveRem * 1000;
+  if (remMs < 3600000) return {type:'soon', rem:remMs, frozen};
+  return {type:'ok', rem:remMs, frozen};
 }
 
 function fmtDur(ms) {
@@ -779,45 +820,38 @@ function getFilterRange() {
 function renderScoreboard() {
   const range = getFilterRange();
   const counts = { Mango: 0, Lost: 0 };
+  const earned = { Mango: 0, Lost: 0 };
+
   pets.forEach(p => {
     (p.history || []).forEach(h => {
       if (h.time < range.from || h.time > range.to) return;
-      if (h.who === 'Mango') counts.Mango++;
-      else if (h.who === 'Lost') counts.Lost++;
+      if (h.who === 'Mango') {
+        counts.Mango++;
+        earned.Mango += (h.earning || 0);
+      } else if (h.who === 'Lost') {
+        counts.Lost++;
+        earned.Lost += (h.earning || 0);
+      }
     });
   });
+
   document.getElementById('sb-num-mango').textContent = counts.Mango;
   document.getElementById('sb-num-lost').textContent = counts.Lost;
-  const mangoWins = counts.Mango >= counts.Lost;
-  const lostWins  = counts.Lost  >= counts.Mango;
-  const tied      = counts.Mango === counts.Lost;
-  document.getElementById('sb-mango').classList.toggle('sb-winner', mangoWins && !tied);
-  document.getElementById('sb-lost').classList.toggle('sb-winner',  lostWins  && !tied);
-  document.getElementById('sb-lbl-mango').textContent = (mangoWins && !tied) ? 'feedings 👑' : 'feedings';
-  document.getElementById('sb-lbl-lost').textContent  = (lostWins  && !tied) ? 'feedings 👑' : 'feedings';
+  const mangoWins = counts.Mango > counts.Lost;
+  const lostWins  = counts.Lost  > counts.Mango;
+  document.getElementById('sb-mango').classList.toggle('sb-winner', mangoWins);
+  document.getElementById('sb-lost').classList.toggle('sb-winner',  lostWins);
+  document.getElementById('sb-lbl-mango').textContent = mangoWins ? 'feedings 👑' : 'feedings';
+  document.getElementById('sb-lbl-lost').textContent  = lostWins  ? 'feedings 👑' : 'feedings';
 
-  // Grand total: linked pets use terminal pending_payout, unlinked use history earnings
-  let grandTotal = 0;
-  let anyLinked = false;
-  pets.forEach(p => {
-    const td = getTerminalDataForPet(p);
-    if (td) {
-      grandTotal += (td.pending_payout || 0);
-      anyLinked = true;
-    } else {
-      (p.history||[]).forEach(h => { grandTotal += (h.earning||0); });
-    }
-  });
-  const isLocal = !anyLinked;
+  const grandTotal = earned.Mango + earned.Lost;
   const gtEl = document.getElementById('sb-grand-total');
-  const gtStr = '$' + grandTotal.toFixed(2) + (isLocal ? '' : '');
+  const gtStr = '$' + grandTotal.toFixed(2);
   gtEl.textContent = gtStr;
   gtEl.classList.remove('digits-3','digits-4plus');
   if (gtStr.length >= 7) gtEl.classList.add('digits-4plus');
   else if (gtStr.length >= 6) gtEl.classList.add('digits-3');
-  document.getElementById('sb-grand-lbl').textContent = 'grand total';
 
-  // badge & subtitle
   const labels = { today:'Today', week:'This week', month:'This month', all:'All-time', custom:'Custom range' };
   const badge = document.getElementById('sb-badge');
   const sub   = document.getElementById('sb-sub-lbl');
@@ -866,6 +900,7 @@ function applySbFilter() {
   renderScoreboard();
 }
 
+// ── Main render ────────────────────────────────────────────────────────────────
 function render() {
   renderScoreboard();
   const counts = {red:0, soon:0, ok:0, none:0};
@@ -885,29 +920,39 @@ function render() {
   const el = document.getElementById('pets-grid');
   if (!pets.length) { el.innerHTML = ''; return; }
 
-  const order = {red:0, soon:1, none:2, ok:3};
+  // Sort: overdue first, then due soon, then ok (shortest remaining first within each tier), then none
+  const typeOrder = {red:0, soon:1, ok:2, none:3};
   const sorted = [...pets].map(p => {
     const td = getTerminalDataForPet(p);
     const st = td ? getStForLinked(p, td) : getSt(p);
-    return {p, st, td};
-  }).sort((a,b) => {
-    const aType = a.st.ready ? 'ok' : a.st.type;
-    const bType = b.st.ready ? 'ok' : b.st.type;
-    return order[aType]-order[bType] || a.st.rem-b.st.rem;
+    const type = st.ready ? 'ok' : st.type;
+    // For sort key: use live remaining seconds for linked, else rem in ms converted to s
+    let sortKey;
+    if (td) {
+      sortKey = st.ready ? 0 : (getLiveRemaining(td) || 0);
+    } else {
+      sortKey = st.type === 'none' ? Infinity : Math.abs(st.rem) / 1000;
+    }
+    return {p, st, td, type, sortKey};
+  }).sort((a, b) => {
+    if (typeOrder[a.type] !== typeOrder[b.type]) return typeOrder[a.type] - typeOrder[b.type];
+    return a.sortKey - b.sortKey;
   });
 
   el.innerHTML = sorted.map(({p, st, td}) => {
     const t = st.ready ? 'ok' : st.type;
 
-    // Time display
+    // FIX: Use getLiveRemaining for the actual displayed time on linked pets
     let bigNum, bigLbl, timeClass;
     if (td) {
-      if (td.remaining_seconds <= 0) {
+      const liveRem = getLiveRemaining(td);
+      const frozen = !!td.frozen;
+      if (liveRem <= 0) {
         bigNum = '✓ ready'; bigLbl = 'account ready'; timeClass = 't-ready';
       } else {
-        bigNum = fmtDur(td.remaining_seconds * 1000);
-        bigLbl = td.remaining_seconds < 3600 ? 'due soon' : 'cooldown';
-        timeClass = td.remaining_seconds < 3600 ? 't-soon' : 't-ok';
+        bigNum = fmtDur(liveRem * 1000);
+        bigLbl = (frozen ? '🔒 frozen · ' : '') + (liveRem < 3600 ? 'due soon' : 'cooldown');
+        timeClass = liveRem < 3600 ? 't-soon' : 't-ok';
       }
     } else {
       bigNum = t==='none' ? 'No meal set' : (t==='red' ? '−' : '') + fmtDur(t==='red' ? -st.rem : st.rem);
@@ -921,7 +966,6 @@ function render() {
     // Earnings card
     let earnHtml = '';
     if (td) {
-      // Terminal-linked: ALWAYS show earnings card (even at $0) so it's never missing
       const payout = td.pending_payout || 0;
       const gs = ['pe-g1','pe-g2','pe-g3','pe-g4'];
       const gi = pets.findIndex(x=>x.id===p.id);
@@ -932,24 +976,28 @@ function render() {
         <div class="pc-earn-break">${td.tasks_done ? td.tasks_done + ' tasks lifetime' : '0 tasks yet'}</div>
       </div>`;
     } else {
-      // Unlinked: compute from history
       const et = hist.reduce((s,h)=>s+(h.earning||0),0);
       const ea = hist.filter(h=>h.approval==='approved').length;
       const em = hist.filter(h=>h.approval==='automod').length;
       if (et||ea||em) {
-        const gs=['pe-g1','pe-g2','pe-g3','pe-g4','pe-g5','pe-g6'];
+        const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
         const gi=pets.findIndex(x=>x.id===p.id);
         const g=gs[gi%gs.length];
-        const svgs=g==='pe-g5'?'<svg class="pe-g5-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><circle cx="70" cy="0" r="45" fill="none" stroke="#B5D4F4" stroke-width="16"/><circle cx="70" cy="0" r="28" fill="none" stroke="#85B7EB" stroke-width="9" opacity=".5"/></svg>':g==='pe-g6'?'<svg class="pe-g6-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><polygon points="70,0 70,55 15,0" fill="#B5D4F4" opacity=".7"/><polygon points="70,30 70,80 5,80" fill="#85B7EB" opacity=".4"/></svg>':'';
         const tot=ea+em||1;
-        earnHtml='<div class="pc-earn '+g+'">'+svgs+'<div class="pc-earn-amt">$'+et.toFixed(2)+'</div><div class="pc-earn-lbl">total earned</div><div class="pc-earn-bars"><div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:'+Math.round(ea/tot*100)+'%"></div></div><span class="peb-num peb-num-ok">'+ea+'</span></div><div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:'+Math.round(em/tot*100)+'%"></div></div><span class="peb-num peb-num-mod">'+em+'</span></div></div></div>';
+        earnHtml=`<div class="pc-earn ${g}">
+          <div class="pc-earn-amt">$${et.toFixed(2)}</div>
+          <div class="pc-earn-lbl">total earned</div>
+          <div class="pc-earn-bars">
+            <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(ea/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${ea}</span></div>
+            <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(em/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${em}</span></div>
+          </div>
+        </div>`;
       }
     }
 
     // Action button
     let btnHtml = '';
     if (td) {
-      // Linked: show both assign buttons explicitly
       btnHtml = `<button class="pc-btn btn-ok" onclick="assignCredit('${p.id}','Mango')">Assign to Mango</button><button class="pc-btn btn-none" style="margin-top:3px" onclick="assignCredit('${p.id}','Lost')">Assign to Lost</button>`;
     } else {
       btnHtml = `<button class="pc-btn btn-${t}" onclick="openFeed('${p.id}')">Mark as fed</button>`;
@@ -973,7 +1021,7 @@ function render() {
           ${sh ? `<div class="hist-list">${hist.slice(0,5).map(h=>`
             <div class="hist-item">
               <span class="hi-who">${esc(h.who)}</span>
-              <span class="hi-rest">${fmtTime(h.time)}${h.approval ? ' · '+(h.approval==='approved'?'$2.00':'$0.50') : ''}</span>
+              <span class="hi-rest">${fmtTime(h.time)}${h.approval ? ' · '+(h.approval==='approved'?'✅ $'+((h.earning||2).toFixed(2)):'⚡ $'+((h.earning||0.5).toFixed(2))) : ''}</span>
             </div>`).join('')}</div>` : ''}
         </div>` : ''}
     </div>`;
@@ -1040,16 +1088,20 @@ function ppFbUrl(person) {
   return FB + 'personal_' + person.toLowerCase() + '_' + syncCode + '.json';
 }
 
+let _ppSaving = {Mango: false, Lost: false};
+
 async function ppLoad(person) {
+  if (_ppSaving[person]) return;
   try {
     const r = await fetch(ppFbUrl(person));
     const d = await r.json();
     ppPets[person] = Array.isArray(d) ? d : (d ? Object.values(d) : []);
-    ppRender();
+    if (document.getElementById('pp-drawer').classList.contains('open')) ppRender();
   } catch(e) {}
 }
 
 async function ppSave(person) {
+  _ppSaving[person] = true;
   try {
     await fetch(ppFbUrl(person), {
       method: 'PUT',
@@ -1057,6 +1109,7 @@ async function ppSave(person) {
       body: JSON.stringify(ppPets[person])
     });
   } catch(e) {}
+  _ppSaving[person] = false;
 }
 
 function openDrawer() {
@@ -1136,6 +1189,8 @@ function ppConfirmFeed() {
 
 function ppRender() {
   const pets_pp = ppPets[ppTab] || [];
+
+  // Only count earnings for the active tab's person
   let total = 0;
   pets_pp.forEach(p => (p.history||[]).forEach(h => total += (h.earning||0)));
   document.getElementById('pp-earn-amt').textContent = '$' + total.toFixed(2);
@@ -1146,9 +1201,17 @@ function ppRender() {
     el.innerHTML = '<div class="pp-empty">No pets yet!<br>Add one above 👆</div>';
     return;
   }
-  const order = {red:0, soon:1, none:2, ok:3};
+
+  // Sort ascending: overdue first, then soon (shortest first), then ok (shortest first), then none
+  const order = {red:0, soon:1, ok:2, none:3};
   const sorted = [...pets_pp].map(p=>({p,st:getSt(p)}))
-    .sort((a,b)=>order[a.st.type]-order[b.st.type]||a.st.rem-b.st.rem);
+    .sort((a,b)=>{
+      if (order[a.st.type] !== order[b.st.type]) return order[a.st.type] - order[b.st.type];
+      // Within same type, sort by ascending remaining time (shortest = most urgent first)
+      const aRem = a.st.type==='none' ? Infinity : Math.abs(a.st.rem);
+      const bRem = b.st.type==='none' ? Infinity : Math.abs(b.st.rem);
+      return aRem - bRem;
+    });
 
   el.innerHTML = sorted.map(({p,st}) => {
     const t = st.type;
@@ -1158,15 +1221,32 @@ function ppRender() {
     const earnTotal = hist.reduce((s,h)=>s+(h.earning||0),0);
     const approved = hist.filter(h=>h.approval==='approved').length;
     const automod  = hist.filter(h=>h.approval==='automod').length;
+    let earnCard = '';
+    if (earnTotal || approved || automod) {
+      const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
+      const gi=pets_pp.findIndex(x=>x.id===p.id);
+      const g=gs[gi%gs.length];
+      const tot=approved+automod||1;
+      earnCard=`<div class="pc-earn ${g}">
+        <div class="pc-earn-amt">$${earnTotal.toFixed(2)}</div>
+        <div class="pc-earn-lbl">total earned</div>
+        <div class="pc-earn-bars">
+          <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(approved/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${approved}</span></div>
+          <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(automod/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${automod}</span></div>
+        </div>
+      </div>`;
+    }
     return `
     <div class="pc pc-${t}">
+      <button class="pc-gear" onclick="ppOpenSettings('${p.id}','${ppTab}')">⚙</button>
       <button class="pc-del" onclick="ppRemovePet('${p.id}')">×</button>
       <div class="pc-avi avi-${t}">${p.emoji}</div>
       <div class="pc-name">${esc(p.name)}</div>
+      ${p.linkedEmail ? `<div class="pc-link-badge">🔗 linked</div>` : ''}
       <div class="pc-time t-${t}">${bigNum}</div>
       <div class="pc-lbl">${bigLbl}</div>
       <div class="pc-who">${p.fedBy?'by '+esc(p.fedBy):''}</div>
-      ${(function(){ if(!earnTotal&&!approved&&!automod) return ''; const gs=['pe-g1','pe-g2','pe-g3','pe-g4','pe-g5','pe-g6']; const gi=ppPets[ppTab].findIndex(x=>x.id===p.id); const g=gs[gi%gs.length]; const svgs=g==='pe-g5'?'<svg class="pe-g5-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><circle cx="70" cy="0" r="45" fill="none" stroke="#B5D4F4" stroke-width="16"/><circle cx="70" cy="0" r="28" fill="none" stroke="#85B7EB" stroke-width="9" opacity=".5"/></svg>':g==='pe-g6'?'<svg class="pe-g6-svg" viewBox="0 0 70 80" preserveAspectRatio="none"><polygon points="70,0 70,55 15,0" fill="#B5D4F4" opacity=".7"/><polygon points="70,30 70,80 5,80" fill="#85B7EB" opacity=".4"/></svg>':''; const tot=approved+automod||1; return '<div class="pc-earn '+g+'">'+svgs+'<div class="pc-earn-amt">$'+earnTotal.toFixed(2)+'</div><div class="pc-earn-lbl">total earned</div><div class="pc-earn-bars"><div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:'+Math.round(approved/tot*100)+'%"></div></div><span class="peb-num peb-num-ok">'+approved+'</span></div><div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:'+Math.round(automod/tot*100)+'%"></div></div><span class="peb-num peb-num-mod">'+automod+'</span></div></div></div>'; })()}
+      ${earnCard}
       <button class="pc-btn btn-${t}" onclick="ppOpenFeed('${p.id}')">Mark as fed</button>
     </div>`;
   }).join('');
@@ -1178,10 +1258,11 @@ setStatus('Code: ' + syncCode + ' — loading…');
 startPolling();
 startPpPolling();
 
-// Fetch terminal stats immediately, then every 8 seconds
+// Fetch terminal stats every 8 seconds
 fetchTerminalStats();
 setInterval(fetchTerminalStats, 8000);
 
+// 1-second ticker: always re-renders so linked-pet timers tick live
 setInterval(render, 1000);
 </script>
 </body>
