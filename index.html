@@ -969,29 +969,43 @@ function render() {
     const hist = p.history || [];
     const sh = showH[p.id];
 
-    // Earnings card — always use history-based earnings for accuracy.
-    // For linked pets we also show the account's pending payout as a secondary info line.
+    // Earnings card — for linked pets show pending_payout as total + tasks_done.
+    // For unlinked pets show history-based earnings.
     let earnHtml = '';
     {
-      const et = hist.reduce((s,h)=>s+(h.earning||0),0);
-      const ea = hist.filter(h=>h.approval==='approved').length;
-      const em = hist.filter(h=>h.approval==='automod').length;
       const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
       const gi=pets.findIndex(x=>x.id===p.id);
       const g=gs[gi%gs.length];
-      const tot=ea+em||1;
-      // Show pending payout from terminal for linked pets as extra info
-      const pendingLine = td ? `<div class="pc-earn-break">$${(td.pending_payout||0).toFixed(2)} pending · ${td.tasks_done||0} tasks</div>` : '';
-      if (et||ea||em||td) {
+      if (td) {
+        // Linked pet: show live pending payout + tasks done
+        const pending = td.pending_payout || 0;
+        const tasks   = td.tasks_done || 0;
+        const ea = hist.filter(h=>h.approval==='approved').length;
+        const em = hist.filter(h=>h.approval==='automod').length;
+        const tot = ea+em||1;
         earnHtml=`<div class="pc-earn ${g}">
-          <div class="pc-earn-amt">$${et.toFixed(2)}</div>
-          <div class="pc-earn-lbl">assigned earnings</div>
-          ${pendingLine}
+          <div class="pc-earn-amt">$${pending.toFixed(2)}</div>
+          <div class="pc-earn-lbl">${tasks} tasks done</div>
           <div class="pc-earn-bars">
             <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(ea/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${ea}</span></div>
             <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(em/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${em}</span></div>
           </div>
         </div>`;
+      } else {
+        const et = hist.reduce((s,h)=>s+(h.earning||0),0);
+        const ea = hist.filter(h=>h.approval==='approved').length;
+        const em = hist.filter(h=>h.approval==='automod').length;
+        const tot=ea+em||1;
+        if (et||ea||em) {
+          earnHtml=`<div class="pc-earn ${g}">
+            <div class="pc-earn-amt">$${et.toFixed(2)}</div>
+            <div class="pc-earn-lbl">${ea+em} tasks done</div>
+            <div class="pc-earn-bars">
+              <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(ea/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${ea}</span></div>
+              <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(em/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${em}</span></div>
+            </div>
+          </div>`;
+        }
       }
     }
 
@@ -1190,9 +1204,13 @@ function ppConfirmFeed() {
 function ppRender() {
   const pets_pp = ppPets[ppTab] || [];
 
-  // Only count earnings for the active tab's person
+  // Total: use live pending_payout from terminal for linked pets, history earnings for unlinked
   let total = 0;
-  pets_pp.forEach(p => (p.history||[]).forEach(h => total += (h.earning||0)));
+  pets_pp.forEach(p => {
+    const td = getTerminalDataForPet(p);
+    if (td) { total += (td.pending_payout || 0); }
+    else { (p.history||[]).forEach(h => total += (h.earning||0)); }
+  });
   document.getElementById('pp-earn-amt').textContent = '$' + total.toFixed(2);
   document.getElementById('pp-earn-lbl').textContent = ppTab + "'s total earnings";
 
@@ -1204,38 +1222,76 @@ function ppRender() {
 
   // Sort ascending: overdue first, then soon (shortest first), then ok (shortest first), then none
   const order = {red:0, soon:1, ok:2, none:3};
-  const sorted = [...pets_pp].map(p=>({p,st:getSt(p)}))
-    .sort((a,b)=>{
-      if (order[a.st.type] !== order[b.st.type]) return order[a.st.type] - order[b.st.type];
-      // Within same type, sort by ascending remaining time (shortest = most urgent first)
-      const aRem = a.st.type==='none' ? Infinity : Math.abs(a.st.rem);
-      const bRem = b.st.type==='none' ? Infinity : Math.abs(b.st.rem);
-      return aRem - bRem;
-    });
+  const sorted = [...pets_pp].map(p=>{
+    const td = getTerminalDataForPet(p);
+    const st = td ? getStForLinked(p, td) : getSt(p);
+    return {p, st};
+  }).sort((a,b)=>{
+    const at = a.st.ready ? 'ok' : a.st.type;
+    const bt = b.st.ready ? 'ok' : b.st.type;
+    if (order[at] !== order[bt]) return order[at] - order[bt];
+    const aRem = at==='none' ? Infinity : Math.abs(a.st.rem);
+    const bRem = bt==='none' ? Infinity : Math.abs(b.st.rem);
+    return aRem - bRem;
+  });
 
   el.innerHTML = sorted.map(({p,st}) => {
-    const t = st.type;
-    const bigNum = t==='none' ? 'No meal set' : (t==='red'?'−':'') + fmtDur(t==='red'?-st.rem:st.rem);
-    const bigLbl = t==='red'?'overdue':t==='soon'?'due soon':t==='ok'?'until next meal':'tap to log';
+    const td = getTerminalDataForPet(p);
+    const t = st.ready ? 'ok' : st.type;
+
+    // Live time display — use terminal data when linked
+    let bigNum, bigLbl, timeClass;
+    if (td) {
+      const liveRem = getLiveRemaining(td);
+      const frozen = !!td.frozen || (td.remaining_seconds >= 43199);
+      if (liveRem <= 0) {
+        bigNum = '✓ ready'; bigLbl = 'account ready'; timeClass = 't-ready';
+      } else {
+        bigNum = fmtDur(liveRem * 1000);
+        bigLbl = (frozen ? '📌 not started · ' : '') + (liveRem < 3600 ? 'due soon' : 'cooldown');
+        timeClass = liveRem < 3600 ? 't-soon' : 't-ok';
+      }
+    } else {
+      bigNum = t==='none' ? 'No meal set' : (t==='red'?'−':'') + fmtDur(t==='red'?-st.rem:st.rem);
+      bigLbl = t==='red'?'overdue':t==='soon'?'due soon':t==='ok'?'until next meal':'tap to log';
+      timeClass = 't-' + t;
+    }
+
     const hist = p.history||[];
-    const earnTotal = hist.reduce((s,h)=>s+(h.earning||0),0);
     const approved = hist.filter(h=>h.approval==='approved').length;
     const automod  = hist.filter(h=>h.approval==='automod').length;
+    const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
+    const gi=pets_pp.findIndex(x=>x.id===p.id);
+    const g=gs[gi%gs.length];
+    const tot=approved+automod||1;
+
     let earnCard = '';
-    if (earnTotal || approved || automod) {
-      const gs=['pe-g1','pe-g2','pe-g3','pe-g4'];
-      const gi=pets_pp.findIndex(x=>x.id===p.id);
-      const g=gs[gi%gs.length];
-      const tot=approved+automod||1;
+    if (td) {
+      // Linked: show live pending payout + tasks
+      const pending = td.pending_payout || 0;
+      const tasks   = td.tasks_done || 0;
       earnCard=`<div class="pc-earn ${g}">
-        <div class="pc-earn-amt">$${earnTotal.toFixed(2)}</div>
-        <div class="pc-earn-lbl">total earned</div>
+        <div class="pc-earn-amt">$${pending.toFixed(2)}</div>
+        <div class="pc-earn-lbl">${tasks} tasks done</div>
         <div class="pc-earn-bars">
           <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(approved/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${approved}</span></div>
           <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(automod/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${automod}</span></div>
         </div>
       </div>`;
+    } else {
+      const earnTotal = hist.reduce((s,h)=>s+(h.earning||0),0);
+      if (earnTotal || approved || automod) {
+        earnCard=`<div class="pc-earn ${g}">
+          <div class="pc-earn-amt">$${earnTotal.toFixed(2)}</div>
+          <div class="pc-earn-lbl">${approved+automod} tasks done</div>
+          <div class="pc-earn-bars">
+            <div class="peb-row"><div class="peb-dot peb-dot-ok"></div><div class="peb-track"><div class="peb-fill peb-fill-ok" style="width:${Math.round(approved/tot*100)}%"></div></div><span class="peb-num peb-num-ok">${approved}</span></div>
+            <div class="peb-row"><div class="peb-dot peb-dot-mod"></div><div class="peb-track"><div class="peb-fill peb-fill-mod" style="width:${Math.round(automod/tot*100)}%"></div></div><span class="peb-num peb-num-mod">${automod}</span></div>
+          </div>
+        </div>`;
+      }
     }
+
     return `
     <div class="pc pc-${t}">
       <button class="pc-gear" onclick="ppOpenSettings('${p.id}','${ppTab}')">⚙</button>
@@ -1243,7 +1299,7 @@ function ppRender() {
       <div class="pc-avi avi-${t}">${p.emoji}</div>
       <div class="pc-name">${esc(p.name)}</div>
       ${p.linkedEmail ? `<div class="pc-link-badge">🔗 linked</div>` : ''}
-      <div class="pc-time t-${t}">${bigNum}</div>
+      <div class="pc-time ${timeClass}">${bigNum}</div>
       <div class="pc-lbl">${bigLbl}</div>
       <div class="pc-who">${p.fedBy?'by '+esc(p.fedBy):''}</div>
       ${earnCard}
